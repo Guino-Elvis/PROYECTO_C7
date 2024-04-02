@@ -22,12 +22,6 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-
-            'apellido_m' => ['required', 'string', 'max:255'], // Corrected validation rule
-            'apellido_p' => ['required', 'string', 'max:255'], // Corrected validation rule
-            'dni' => ['required', 'string', 'max:255'], // Corrected validation rule
-            'direccion' => ['required', 'string', 'max:255'], // Corrected validation rule
-            'telefono' => ['required', 'string', 'max:255'], // Corrected validation rule
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
@@ -35,11 +29,6 @@ class CreateNewUser implements CreatesNewUsers
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
-            'apellido_p' => $input['apellido_p'],
-            'apellido_m' => $input['apellido_m'],
-            'dni' => $input['dni'],
-            'direccion' => $input['direccion'],
-            'telefono' => $input['telefono'],
             'password' => Hash::make($input['password']),
         ]);
     }

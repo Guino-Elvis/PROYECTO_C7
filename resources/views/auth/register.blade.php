@@ -18,30 +18,7 @@
                 <x-label for="email" value="{{ __('Email') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             </div>
-            <div class="flex flex-row">
-                <div class="mt-4">
-                    <x-label for="apellido_p" value="{{ __('Apellido Paterno') }}" />
-                    <x-input id="apellido_p" class="block mt-1 w-full" type="text" name="apellido_p" :value="old('apellido_p')" required autocomplete="username" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="apellido_m" value="{{ __('Apellido Materno') }}" />
-                    <x-input id="apellido_m" class="block mt-1 w-full" type="text" name="apellido_m" :value="old('apellido_m')" required autocomplete="username" />
-                </div>
-            </div>
-            <div class="mt-4">
-                <x-label for="dni" value="{{ __('Dni') }}" />
-                <x-input id="dni" class="block mt-1 w-full" type="text" name="dni" :value="old('dni')" required autocomplete="username" />
-            </div>
-            <div class="flex flex-row">
-                <div class="mt-4">
-                    <x-label for="direccion" value="{{ __('Direccion') }}" />
-                    <x-input id="direccion" class="block mt-1 w-full" type="text" name="direccion" :value="old('direccion')" required autocomplete="username" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="telefono" value="{{ __('Telefono') }}" />
-                    <x-input id="telefono" class="block mt-1 w-full" type="text" name="telefono" :value="old('telefono')" required autocomplete="username" />
-                </div>
-            </div>
+
             <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
@@ -53,29 +30,29 @@
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-            <div class="mt-4">
-                <x-label for="terms">
-                    <div class="flex items-center">
-                        <x-checkbox name="terms" id="terms" required />
+                <div class="mt-4">
+                    <x-label for="terms">
+                        <div class="flex items-center">
+                            <x-checkbox name="terms" id="terms" required />
 
-                        <div class="ms-2">
-                            {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                            'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                            'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
-                            ]) !!}
+                            <div class="ml-2">
+                                {!! __('Acepto los :terms_of_service y :privacy_policy', [
+                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Términos de servicio').'</a>',
+                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Política de privacidad').'</a>',
+                                ]) !!}
+                            </div>
                         </div>
-                    </div>
-                </x-label>
-            </div>
+                    </x-label>
+                </div>
             @endif
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                    {{ __('¿Ya estas registrado?') }}
                 </a>
 
-                <x-button class="ms-4">
-                    {{ __('Register') }}
+                <x-button class="ml-4">
+                    {{ __('Registrar') }}
                 </x-button>
             </div>
         </form>

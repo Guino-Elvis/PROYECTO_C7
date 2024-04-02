@@ -18,6 +18,8 @@ class ApiTokenPermissionsTest extends TestCase
     {
         if (! Features::hasApiFeatures()) {
             $this->markTestSkipped('API support is not enabled.');
+
+            return;
         }
 
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());

@@ -1,0 +1,168 @@
+{
+    "menu": [
+        {
+            "name": "Dashboard",
+            "icon": "fa-solid fa-chart-simple",
+            "roles": ["Administrador", "Cliente"],
+            "submenu": [
+                {
+                    "url": "dashboard-general",
+                    "name": "General",
+                    "roles": ["Administrador", "Cliente"],
+                    "slug": "dashboard-general"
+                },
+                {
+                    "url": "dashboard-ventas",
+                    "name": "Ventas",
+                    "roles": ["Administrador"],
+                    "slug": "dashboard-ventas"
+                }
+            ]
+        },
+        {
+            "menuHeader": "APPS & PAGES",
+            "roles": ["Administrador", "Cliente"]
+        },
+        {
+            "name": "Configurar cuenta",
+            "icon": "fa-solid fa-user-gear",
+            "roles": ["Administrador", "Cliente"],
+            "submenu": [
+                {
+                    "url": "configurar-cuenta-perfil",
+                    "name": "Perfil",
+                    "roles": ["Administrador", "Cliente"],
+                    "slug": "configurar-cuenta-perfil"
+                },
+                {
+                    "url": "configurar-cuenta-yape",
+                    "name": "Yape",
+                    "roles": ["Administrador"],
+                    "slug": "configurar-cuenta-yape"
+                }
+            ]
+        },
+        {
+            "name": "Seguridad",
+            "icon": "fa-solid fa-unlock",
+            "roles": ["Administrador"],
+            "submenu": [
+                {
+                    "url": "seguridad-roles",
+                    "name": "Roles",
+                    "roles": ["Administrador"],
+                    "slug": "seguridad-roles"
+                },
+                {
+                    "url": "seguridad-permisos",
+                    "name": "Permisos",
+                    "roles": ["Administrador"],
+                    "slug": "seguridad-permisos"
+                }
+            ]
+        },
+        {
+            "url": "favoritos",
+            "icon": "fa-solid fa-heart",
+            "roles": ["Cliente"],
+            "name": "Favoritos"
+        },
+        {
+            "url": "mensajes",
+            "icon": "fa-solid fa-comments",
+            "roles": ["Cliente"],
+            "name": "Mensajes"
+        },
+        {
+            "menuHeader": "FORMS & TABLES",
+            "roles": ["Administrador"]
+        },
+        {
+            "url": "tabla-usuarios",
+            "icon": "fa-solid fa-users",
+            "roles": ["Administrador"],
+            "name": "Usuarios"
+        },
+        {
+            "url": "tabla-categorias",
+            "icon": "fa-solid fa-tags",
+            "roles": ["Administrador"],
+            "name": "Categorias"
+        },
+        {
+            "url": "tabla-productos",
+            "icon": "fa-solid fa-cart-flatbed-suitcase",
+            "roles": ["Administrador"],
+            "name": "Productos"
+        },
+        {
+            "url": "tabla-banners",
+            "icon": "fa-regular fa-images",
+            "roles": ["Administrador"],
+            "name": "Banners"
+        },
+        {
+            "menuHeader": "SALES & CLIENTS",
+            "roles": ["Administrador"]
+        },
+        {
+            "url": "tabla-venta-clientes",
+            "icon": "fa-solid fa-restroom",
+            "roles": ["Administrador"],
+            "name": "Clientes"
+        },
+        {
+            "url": "tabla-venta-entregas",
+            "icon": "fa-solid fa-truck",
+            "roles": ["Administrador"],
+            "name": "Entregas"
+        },
+        {
+            "name": "Registro de ventas",
+            "icon": "fa-solid fa-folder-tree",
+            "roles": ["Administrador"],
+            "submenu": [
+                {
+                    "url": "registro-de-ventas",
+                    "name": "Ventas",
+                    "roles": ["Administrador"],
+                    "slug": "registro-de-ventas"
+                },
+                {
+                    "url": "registro-de-ventas-pagos-yape",
+                    "name": "Pagos Yape",
+                    "roles": ["Administrador"],
+                    "slug": "registro-de-ventas-pagos-yape"
+                },
+                {
+                    "url": "registro-de-ventas-productos-vendidos",
+                    "name": "Productos vendidos",
+                    "roles": ["Administrador"],
+                    "slug": "registro-de-ventas-productos-vendidos"
+                }
+            ]
+        },
+        {
+            "menuHeader": "SHOPPING & PAYMENTS",
+            "roles": ["Cliente"]
+        },
+        {
+            "url": "registro-de-compras",
+            "icon": "fa-solid fa-rectangle-list",
+            "roles": ["Cliente"],
+            "name": "Compras"
+        },
+        {
+            "url": "registro-de-compras-pagos-yape",
+            "icon": "fa-solid fa-wallet",
+            "roles": ["Cliente"],
+            "name": "Pagos yape"
+        },
+        {
+            "url": "registro-de-compras-productos-comprados",
+            "icon": "fa-solid fa-cart-flatbed-suitcase",
+            "roles": ["Cliente"],
+            "name": "Productos comprados"
+        }
+    ]
+}

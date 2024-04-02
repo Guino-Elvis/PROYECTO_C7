@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
@@ -15,6 +16,8 @@ class RegistrationTest extends TestCase
     {
         if (! Features::enabled(Features::registration())) {
             $this->markTestSkipped('Registration support is not enabled.');
+
+            return;
         }
 
         $response = $this->get('/register');
@@ -26,6 +29,8 @@ class RegistrationTest extends TestCase
     {
         if (Features::enabled(Features::registration())) {
             $this->markTestSkipped('Registration support is enabled.');
+
+            return;
         }
 
         $response = $this->get('/register');
@@ -37,6 +42,8 @@ class RegistrationTest extends TestCase
     {
         if (! Features::enabled(Features::registration())) {
             $this->markTestSkipped('Registration support is not enabled.');
+
+            return;
         }
 
         $response = $this->post('/register', [
@@ -48,6 +55,6 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(RouteServiceProvider::HOME);
     }
 }
