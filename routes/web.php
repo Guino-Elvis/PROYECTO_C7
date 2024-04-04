@@ -2,9 +2,11 @@
 
 use App\Http\Livewire\AccountSettingProfile;
 use App\Http\Livewire\AccountSettingYape;
+//use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\DashboardGeneral;
 use App\Http\Livewire\SecurityPermissions;
 use App\Http\Livewire\SecurityRoles;
+use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\TableCategories;
 use App\Http\Livewire\TableProducts;
 use App\Http\Livewire\TableUsers;
@@ -52,6 +54,7 @@ Route::group(
             Route::get('/sistema/pagina/tabla-usuarios', TableUsers::class)->name('tabla-usuarios');
             Route::get('/sistema/pagina/tabla-categorias', TableCategories::class)->name('tabla-categorias');
             Route::get('/sistema/pagina/tabla-productos', TableProducts::class)->name('tabla-productos');
+           Route::get('/sistema/pagina/tabla-empresas', SisCrudEmpresa::class)->name('tabla-empresas');
             Route::get('/sistema/pagina/tabla-banners', AccountSettingProfile::class)->name('tabla-banners');
 
             Route::get('/sistema/pagina/tabla-venta-clientes', AccountSettingProfile::class)->name('tabla-venta-clientes');

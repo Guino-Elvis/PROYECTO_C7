@@ -96,6 +96,12 @@
             "name": "Productos"
         },
         {
+            "url": "tabla-empresas",
+            "icon": "fa-regular fa-images",
+            "roles": ["Administrador"],
+            "name": "Empresas"
+        },
+        {
             "url": "tabla-banners",
             "icon": "fa-regular fa-images",
             "roles": ["Administrador"],

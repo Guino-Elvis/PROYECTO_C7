@@ -21,6 +21,11 @@ class TableUsers extends Component
     protected $rules = [
         'user.name' => 'required',
         'user.email' => 'required',
+        'user.apellido_p' => 'required',
+        'user.apellido_m' => 'required',
+        'user.dni' => 'required',
+        'user.direccion' => 'required',
+        'user.telefono' => 'required',
         'user.password' => 'required',
     ];
 
@@ -47,6 +52,11 @@ class TableUsers extends Component
             $user = User::create([
                 'name' => $this->user['name'],
                 'email' => $this->user['email'],
+                'apellido_p' => $this->user['apellido_p'],
+                'apellido_m' => $this->user['apellido_m'],
+                'dni' => $this->user['dni'],
+                'direccion' => $this->user['direccion'],
+                'telefono' => $this->user['telefono'],
                 'password' => bcrypt($this->user['password']),
             ]);
             $this->emit('alert', 'Registro creado satisfactoriamente');
@@ -55,6 +65,11 @@ class TableUsers extends Component
             $user->update([
                 'name' => $this->user['name'],
                 'email' => $this->user['email'],
+                'apellido_p' => $this->user['apellido_p'],
+                'apellido_m' => $this->user['apellido_m'],
+                'dni' => $this->user['dni'],
+                'direccion' => $this->user['direccion'],
+                'telefono' => $this->user['telefono'],
                 'password' => bcrypt($this->user['password']),
             ]);
             $this->emit('alert', 'Registro actualizado satisfactoriamente');

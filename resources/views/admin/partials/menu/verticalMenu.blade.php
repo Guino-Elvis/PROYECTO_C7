@@ -37,12 +37,12 @@
 <aside id="logo-sidebar"
     class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full lg:translate-x-0"
     aria-label="Sidebar">
-    <div class="h-full bg-white border-r">
-        <div class="flex items-center justify-center sticky z-10 top-0 h-16 bg-white">
+    <div class="h-full bg-[#4D73DF] border-r">
+        <div class="flex items-center justify-center sticky z-10 top-0 h-16 bg-[#4D73DF]">
             <a href="#" title="home">
                 <div class="flex gap-4 items-center self-center">
                     <img src="{{ asset('assets/img/favicon/favicon.ico') }}" alt class="w-12 ml-[-10px]">
-                    <div class="flex flex-col">
+                    <div class="flex flex-col text-white ">
                         <span class="text-base font-bold italic"> Bienvenido al</span>
                         <span class="text-sm italic -mt-1"> Panel de Control </span>
                     </div>
@@ -58,7 +58,7 @@
                                 isset($menu['roles']) && count(array_intersect($menu['roles'], $userRoles)) > 0;
                         @endphp
                         @if ($showMenuHeader)
-                            <li class="flex items-center py-2 text-gray-400">
+                            <li class="flex items-center py-2 text-white">
                                 <span class="w-1/12 h-0.5 bg-gradient-to-l to-gray-100 from-gray-300"></span>
                                 <span class="flex-none text-xs mx-1 uppercase">{{ $menu['menuHeader'] }}</span>
                                 <span class="w-full h-0.5 bg-gradient-to-r to-gray-100 from-gray-300"></span>
@@ -115,15 +115,15 @@
                 @endforeach
             </ul>
         </div>
-        <div class="p-3 sticky z-10 bottom-0 h-16 bg-white border-t">
-            <ul>
+        <div class="p-3 sticky z-10 bottom-0 h-16 bg-[#4D73DF] border-t">
+            <ul class="">
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
                     <x-sidebar-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
                         <x-slot name="logo">
                             <i class="fa-solid fa-power-off"></i>
                         </x-slot>
-                        Cerrar sesión
+                        <samp class="text-white hover:text-blue-400">Cerrar sesión</samp>
                     </x-sidebar-link>
                 </form>
             </ul>

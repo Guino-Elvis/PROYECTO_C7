@@ -2,8 +2,8 @@
 
 @php
 $classes = ($active ?? false)
-            ? 'w-full relative px-4 py-2 flex justify-between items-center align-middle rounded-xl text-gray-600 bg-gray-100'
-            : 'w-full px-4 py-2 flex justify-between items-center align-middle rounded-xl text-gray-600 group hover:text-indigo-600 hover:bg-gray-100 active:bg-gray-200';
+            ? 'w-full relative px-4 py-2 flex justify-between items-center align-middle rounded-xl text-white bg-gray-100'
+            : 'w-full px-4 py-2 flex justify-between items-center align-middle rounded-xl text-white group hover:text-indigo-600 hover:bg-gray-100 active:bg-gray-200';
 @endphp
 
 <li>
