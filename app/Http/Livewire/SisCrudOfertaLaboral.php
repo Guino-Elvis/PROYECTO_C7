@@ -52,6 +52,7 @@ class SisCrudOfertaLaboral extends Component
             ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
             ->latest('id')
             ->paginate($this->amount);
+         
             $empresas = Empresa::all();
             return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas'));
     }
@@ -86,8 +87,11 @@ class SisCrudOfertaLaboral extends Component
 {
 
     $this->ofertaLaboral = $ofertaLaboral;
+    // $this->ofertaLaboral = array_slice($ofertaLaboral, 0, 7);
+    
     $this->isOpen = true;
     $this->ruteCreate = false;
+   
 
 }
 

@@ -2,9 +2,9 @@
     <x-dialog-modal wire:model="isOpen" maxWidth="lg">
         <x-slot name="title">
             @if ($ruteCreate)
-                <h3 class="text-center">Registrar nueva Oferta Laboral</h3>
+            <h3 class="text-center">Registrar nueva Oferta Laboral</h3>
             @else
-                <h3 class="text-center">Actualizar Oferta Laboral</h3>
+            <h3 class="text-center">Actualizar Oferta Laboral</h3>
             @endif
         </x-slot>
         <x-slot name="content">
@@ -17,28 +17,28 @@
                             <x-label value="Titulo " class="font-bold" />
                             <x-input class="w-full" type="text" wire:model="ofertaLaboral.titulo" />
                             @unless (!empty($ofertaLaboral['titulo']))
-                                <x-input-error for="ofertaLaboral.titulo" />
+                            <x-input-error for="ofertaLaboral.titulo" />
                             @endunless
                         </div>
                         <div>
                             <x-label value="Descripcion de la ofertaLaboral" class="font-bold" />
                             <x-input class="w-full" type="text" wire:model="ofertaLaboral.descripcion" />
                             @unless (!empty($ofertaLaboral['descripcion']))
-                                <x-input-error for="ofertaLaboral.descripcion" />
+                            <x-input-error for="ofertaLaboral.descripcion" />
                             @endunless
                         </div>
                         <div>
                             <x-label value="Detalles de la ofertaLaboral" class="font-bold" />
                             <textarea class="w-full rounded-md" wire:model="ofertaLaboral.body"></textarea>
                             @unless (!empty($ofertaLaboral['body']))
-                                <x-input-error for="ofertaLaboral.body" />
+                            <x-input-error for="ofertaLaboral.body" />
                             @endunless
                         </div>
                         <div class="mb-1 w-full">
                             <x-label value="Ubicacion " class="font-bold" />
                             <x-input class="w-full" type="text" wire:model="ofertaLaboral.ubicacion" />
                             @unless (!empty($ofertaLaboral['ubicacion']))
-                                <x-input-error for="ofertaLaboral.ubicacion" />
+                            <x-input-error for="ofertaLaboral.ubicacion" />
                             @endunless
                         </div>
                         <div class="flex flex-row gap-2.5 justify-start">
@@ -46,14 +46,14 @@
                                 <x-label value="Remuneracion de la ofertaLaboral" class="font-bold" />
                                 <x-input class="w-full" type="text" wire:model="ofertaLaboral.remuneracion" />
                                 @unless (!empty($ofertaLaboral['remuneracion']))
-                                    <x-input-error for="ofertaLaboral.remuneracion" />
+                                <x-input-error for="ofertaLaboral.remuneracion" />
                                 @endunless
                             </div>
                             <div class="w-1/2">
                                 <x-label value="Limite de postulantes" class="font-bold" />
                                 <x-input class="w-full" type="text" wire:model="ofertaLaboral.limite_postulante" />
                                 @unless (!empty($ofertaLaboral['limite_postulante']))
-                                    <x-input-error for="ofertaLaboral.limite_postulante" />
+                                <x-input-error for="ofertaLaboral.limite_postulante" />
                                 @endunless
                             </div>
                         </div>
@@ -63,14 +63,14 @@
                                 <x-label value="Fecha de Inicio" class="font-bold" />
                                 <x-input class="w-full" type="date" wire:model="ofertaLaboral.fecha_inicio" />
                                 @unless (!empty($ofertaLaboral['fecha_inicio']))
-                                    <x-input-error for="ofertaLaboral.fecha_inicio" />
+                                <x-input-error for="ofertaLaboral.fecha_inicio" />
                                 @endunless
                             </div>
                             <div class="flex-auto">
                                 <x-label value="Fecha de Cierre" class="font-bold" />
                                 <x-input class="w-full" type="date" wire:model="ofertaLaboral.fecha_fin" />
                                 @unless (!empty($ofertaLaboral['fecha_fin']))
-                                    <x-input-error for="ofertaLaboral.fecha_fin" />
+                                <x-input-error for="ofertaLaboral.fecha_fin" />
                                 @endunless
                             </div>
                         </div>
@@ -82,14 +82,16 @@
                                 <x-select wire:model="ofertaLaboral.state">
                                     <x-slot name="options">
                                         <option value="" selected>Seleccione...</option>
-                                        <option value="1" {{ $ofertaLaboral['state'] == 1 ? 'selected' : '' }}>
-                                            Escondido</option>
-                                        <option value="2" {{ $ofertaLaboral['state'] == 2 ? 'selected' : '' }}>
-                                            Visible</option>
+                                        <option value="1" {{ $ofertaLaboral['state'] ?? '' == 1 ? 'selected' : '' }}>
+                                            Escondido
+                                        </option>
+                                        <option value="2" {{ $ofertaLaboral['state'] ?? '' == 2 ? 'selected' : '' }}>
+                                            Visible
+                                        </option>
                                     </x-slot>
                                 </x-select>
                                 @error('ofertaLaboral.state')
-                                    <div class="text-red-500">{{ $message }}</div>
+                                <div class="text-red-500">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="flex-auto">
@@ -98,15 +100,14 @@
                                     <x-slot name="options">
                                         <option value="" selected>Seleccione...</option>
                                         @foreach ($empresas as $empresa)
-                                            <option value="{{ $empresa->id }}"
-                                                {{ $ofertaLaboral['empresa_id'] == $empresa->id ? 'selected' : '' }}>
-                                                {{ $empresa->ra_social }}
-                                            </option>
+                                        <option value="{{ $empresa->id }}" {{ $ofertaLaboral['empresa_id'] ?? '' == $empresa->id ? 'selected' : '' }}>
+                                            {{ $empresa->ra_social }}
+                                        </option>
                                         @endforeach
                                     </x-slot>
                                 </x-select>
                                 @error('ofertaLaboral.empresa_id')
-                                    <div class="text-red-500">{{ $message }}</div>
+                                <div class="text-red-500">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -119,12 +120,11 @@
         </x-slot>
         <x-slot name="footer">
             <x-button-danger wire:click="$set('isOpen',false)">Cancelar</x-button-danger>
-            <x-button-success wire:click.prevent="store()" wire:loading.attr="disabled" wire:target="store, image"
-                class="disabled:opacity-25">
+            <x-button-success wire:click.prevent="store()" wire:loading.attr="disabled" wire:target="store, image" class="disabled:opacity-25">
                 @if ($ruteCreate)
-                    Registrar
+                Registrar
                 @else
-                    Actualizar
+                Actualizar
                 @endif
             </x-button-success>
         </x-slot>

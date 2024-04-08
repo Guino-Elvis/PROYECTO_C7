@@ -67,7 +67,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300 bg-white">
-                    @foreach ($ofertaLaborals as $index => $item)
+                    @foreach ($ofertaLaborals as $index => $ofertaLaboral)
                         <tr class="text-sm font-medium text-gray-900 hover:bg-gray-100">
                             <td class="p-4">
                                 <span
@@ -75,11 +75,11 @@
                                     {{ $index + 1 }}
                                 </span>
                             </td>
-                            <td class="p-4 text-center">{{ $item->titulo }}</td>
-                            <td class="p-4 text-center">{{ $item->ubicacion }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->titulo }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->ubicacion }}</td>
                             <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center items-center">
-                                    @if ($item->state == 1)
+                                <div class="flex justify-center ofertaLaborals-center">
+                                    @if ($ofertaLaboral->state == 1)
                                         <span
                                             class="bg-amber-100 text-amber-500 text-xs font-semibold px-2.5 py-0.5 rounded-full">
                                             Escondido
@@ -92,26 +92,26 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="p-4 text-center">{{ $item->remuneracion }}</td>
-                            <td class="p-4 text-center">{{ $item->fecha_inicio }}</td>
-                            <td class="p-4 text-center">{{ $item->fecha_fin }}</td>
-                            <td class="p-4 text-center">{{ $item->limite_postulante }}</td>
-                            <td class="p-4 text-center">{{ $item->empresa->ra_social }}</td>
-                            <td class="p-4 text-center">{{ $item->user->name }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->remuneracion }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->fecha_inicio }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->fecha_fin }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->limite_postulante }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->empresa->ra_social }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->user->name }}</td>
 
-                            <td class="p-4 text-center">{{ $item->created_at }}</td>
-                            <td class="p-4 text-center">{{ $item->updated_at }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->created_at }}</td>
+                            <td class="p-4 text-center">{{ $ofertaLaboral->updated_at }}</td>
                             <td class="p-4 acciones w-10 space-y-2">
-                                {{-- @livewire('cliente-edit',['cliente'=>$itemo],key($itemo->id)) --}}
-                                <x-button-success wire:click="edit({{ $item }})">
+                                {{-- @livewire('cliente-edit',['cliente'=>$ofertaLaboralo],key($ofertaLaboralo->id)) --}}
+                                <x-button-success wire:click="edit({{ $ofertaLaboral }})">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </x-button-success>
                                <form method="post"
-                                action="{{ url('/oferta_laboral/' . $item->id) }}">
+                                action="{{ url('/oferta_laboral/' . $ofertaLaboral->id) }}">
                                 @csrf
                                 {{ method_field('DELETE') }}
-                                    <button class="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" type="button"
-                                      data-oferta-laboral-id="{{ $item->id }}"
+                                    <button class="inline-flex ofertaLaborals-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" type="button"
+                                      data-oferta-laboral-id="{{ $ofertaLaboral->id }}"
                                         onclick="confirmDelete(this)">
                                         <i class="fas fa-trash"></i>
                                     </button>
