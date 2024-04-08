@@ -1,6 +1,6 @@
-@section('title', 'Lista de Empresas - BOLSALABORAL')
-@section('header', 'Lista de Empresas')
-@section('section', 'BOLSALABORAL')
+@section('title', 'Lista de Ofertas Laborales - OFERTA LABORAL')
+@section('header', 'Lista de Ofertas Laborales')
+@section('section', 'oferta LABORAL')
 
 <div>
     <div>
@@ -25,15 +25,15 @@
                         <option value="100">100</option>
                     </x-slot>
                 </x-select>
-                <a href="{{ URL::to('/empresas/csv') }}"
+                <a href="{{ URL::to('/ofertas_laborales/csv') }}"
                     class="px-4 py-2 flex gap-1 items-center rounded-lg bg-gradient-to-r from-emerald-700 to-green-600 focus:from-emerald-700 focus:to-green-600 active:from-green-600 active:to-green-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg">
                     <i class="fa-regular fa-file-excel"></i> csv
                 </a>
-                <a href="{{ URL::to('/empresas/excel') }}"
+                <a href="{{ URL::to('/ofertas_laborales/excel') }}"
                     class="px-4 py-2 flex gap-1 items-center rounded-lg bg-gradient-to-r from-emerald-700 to-green-600 focus:from-emerald-700 focus:to-green-600 active:from-green-600 active:to-green-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg">
                     <i class="fa-regular fa-file-excel"></i>excel
                 </a>
-                <a href="{{ URL::to('/empresas/pdf') }}" target="_blank"
+                <a href="{{ URL::to('/ofertas_laborales/pdf') }}" target="_blank"
                     class="px-4 py-2 flex gap-1 items-center rounded-lg bg-gradient-to-r from-sky-900 to-blue-700 focus:from-sky-900 focus:to-blue-700 active:from-sky-700 active:to-blue-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg">
                     <i class="fa-regular fa-file-lines"></i> pdf
                 </a>
@@ -43,7 +43,7 @@
                     <i class="fa-solid fa-plus"></i> Nuevo
                 </button>
                 @if ($isOpen)
-                    @include('admin.modals.empresas')
+                    @include('admin.modals.oferta-laboral')
                 @endif
             </div>
         </div>
@@ -52,21 +52,22 @@
                 <thead class="bg-indigo-700 text-white">
                     <tr class="text-center text-xs font-bold uppercase">
                         <td scope="col" class="px-6 py-3">ID</td>
-                        <td scope="col" class="px-6 py-3">Razon Social</td>
-                        <td scope="col" class="px-6 py-3">Logo Empresa</td>
-                        <td scope="col" class="px-6 py-3">RUC</td>
-                        <td scope="col" class="px-6 py-3">Direccion</td>
-                        <td scope="col" class="px-6 py-3">Telefono</td>
-                        <td scope="col" class="px-6 py-3">Correo</td>
+                        <td scope="col" class="px-6 py-3">titulo</td>
+                        <td scope="col" class="px-6 py-3">ubicacion</td>
+                        <td scope="col" class="px-6 py-3">Estado</td>
+                        <td scope="col" class="px-6 py-3">remuneracion</td>
+                        <td scope="col" class="px-6 py-3">fecha_inicio</td>
+                        <td scope="col" class="px-6 py-3">fecha_fin</td>
+                        <td scope="col" class="px-6 py-3">limite de postulantes</td>
+                        <td scope="col" class="px-6 py-3">Empresa</td>
                         <td scope="col" class="px-6 py-3">Usuario</td>
-                        <td scope="col" class="px-6 py-3">ROL USUARIO</td>
                         <td scope="col" class="px-6 py-3">Creacion</td>
                         <td scope="col" class="px-6 py-3">Actualizado</td>
                         <th scope="col" class="px-4 py-3 ">acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300 bg-white">
-                    @foreach ($empresas as $index => $item)
+                    @foreach ($ofertaLaborals as $index => $item)
                         <tr class="text-sm font-medium text-gray-900 hover:bg-gray-100">
                             <td class="p-4">
                                 <span
@@ -74,22 +75,30 @@
                                     {{ $index + 1 }}
                                 </span>
                             </td>
-                            <td class="p-4 text-center">{{ $item->ra_social }}</td>
-                            <td class="p-2">
-                                <img class="w-24 h-24 object-cover rounded-lg"
-                                    src="{{ $item->image ? Storage::url($item->image->url) : '/img/default.jpg' }}" />
+                            <td class="p-4 text-center">{{ $item->titulo }}</td>
+                            <td class="p-4 text-center">{{ $item->ubicacion }}</td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="flex justify-center items-center">
+                                    @if ($item->state == 1)
+                                        <span
+                                            class="bg-amber-100 text-amber-500 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                            Escondido
+                                        </span>
+                                    @else
+                                        <span
+                                            class="bg-green-100 text-green-500 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                            Visible
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
-
-                            <td class="p-4 text-center">{{ $item->ruc }}</td>
-                            <td class="p-4 text-center">{{ $item->direccion }}</td>
-                            <td class="p-4 text-center">{{ $item->correo }}</td>
-                            <td class="p-4 text-center">{{ $item->telefono }}</td>
+                            <td class="p-4 text-center">{{ $item->remuneracion }}</td>
+                            <td class="p-4 text-center">{{ $item->fecha_inicio }}</td>
+                            <td class="p-4 text-center">{{ $item->fecha_fin }}</td>
+                            <td class="p-4 text-center">{{ $item->limite_postulante }}</td>
+                            <td class="p-4 text-center">{{ $item->empresa->ra_social }}</td>
                             <td class="p-4 text-center">{{ $item->user->name }}</td>
-                            @foreach ($item->user->roles as $role)
-                            <td class="p-4 text-center">
-                             {{ $role->name }}
-                            </td>
-                            @endforeach
+
                             <td class="p-4 text-center">{{ $item->created_at }}</td>
                             <td class="p-4 text-center">{{ $item->updated_at }}</td>
                             <td class="p-4 acciones w-10 space-y-2">
@@ -98,11 +107,11 @@
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </x-button-success>
                                <form method="post"
-                                action="{{ url('/empresa/' . $item->id) }}">
+                                action="{{ url('/oferta_laboral/' . $item->id) }}">
                                 @csrf
                                 {{ method_field('DELETE') }}
                                     <button class="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" type="button"
-                                      data-empresas-id="{{ $item->id }}"
+                                      data-oferta-laboral-id="{{ $item->id }}"
                                         onclick="confirmDelete(this)">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -113,7 +122,7 @@
                 </tbody>
             </table>
         </div>
-        @if (!$empresas->count())
+        @if (!$ofertaLaborals->count())
             <div class="flex h-auto items-center justify-center p-5 bg-white w-full rounded-lg shadow-lg">
                 <div class="text-center">
                     <div class="inline-flex rounded-full bg-yellow-100 p-4">
@@ -127,9 +136,9 @@
                 </div>
             </div>
         @endif
-        @if ($empresas->hasPages())
+        @if ($ofertaLaborals->hasPages())
             <div class="px-6 py-3">
-                {{ $empresas->links() }}
+                {{ $ofertaLaborals->links() }}
             </div>
         @endif
     </div>
@@ -137,7 +146,7 @@
 
     <script>
         function confirmDelete(button) {
-            const id = button.getAttribute('data-empresas-id');
+            const id = button.getAttribute('data-oferta-laboral-id');
 
             Swal.fire({
                 title: 'Confirmar eliminación',
@@ -157,7 +166,7 @@
         function deleteRecord(id) {
             $.ajax({
                 type: 'POST',
-                url: '{{ url('/empresa') }}/' + id,
+                url: '{{ url('/oferta_laboral') }}/' + id,
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "_method": "DELETE"
@@ -174,3 +183,4 @@
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </div>
+

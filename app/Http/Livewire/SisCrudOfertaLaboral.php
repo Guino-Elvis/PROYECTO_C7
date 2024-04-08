@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
 use App\Models\Empresa;
+use Livewire\Component;
+use App\Models\OfertaLaboral;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -16,41 +16,44 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-class SisCrudEmpresa extends Component
+
+class SisCrudOfertaLaboral extends Component
 {
     use WithFileUploads;
     use WithPagination;
 
     public $isOpen = false;
     public $ruteCreate = false;
+    public $ofertaLaboralState, $ofertaLaboralEmpresa;
     public  $amount = 5;
-    public $search, $empresa, $image;
+    public $search, $ofertaLaboral;
+    public $images = [];
     protected $listeners = ['render', 'delete' => 'delete'];
 
     protected $rules = [
-        'empresa.ra_social' => 'required',
-        'empresa.ruc' => 'required',
-        'empresa.direccion' => 'required',
-        'empresa.telefono' => 'required',
-        'empresa.correo' => 'required',
-        // 'empresa.user_id' => 'required'
+        'ofertaLaboral.titulo' => 'required',
+        'ofertaLaboral.remuneracion' => 'required',
+        'ofertaLaboral.ubicacion' => 'required',
+        'ofertaLaboral.descripcion' => 'required',
+        'ofertaLaboral.body' => 'required',
+        'ofertaLaboral.fecha_inicio' => 'required',
+        'ofertaLaboral.fecha_fin' => 'required',
+        'ofertaLaboral.limite_postulante' => 'required',
+        'ofertaLaboral.state' => 'required',
+        'ofertaLaboral.empresa_id' => 'required',
+
     ];
 
     public function render()
     {
-        $empresas = Empresa::query()
-            ->with('user.roles')
-            ->where(function ($query) {
-                $query->where('ra_social', 'like', '%' . $this->search . '%')
-                    ->orWhere('ruc', 'like', '%' . $this->search . '%')
-                    ->orWhere('correo', 'like', '%' . $this->search . '%');
-            })
-
-
+        $this->ofertaLaboral['user_id'] = auth()->user()->id;
+        $ofertaLaborals = OfertaLaboral::where('titulo', 'like', '%' . $this->search . '%')
+            ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
+            ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
             ->latest('id')
             ->paginate($this->amount);
-
-        return view('admin.pages.empresa-page-crud', compact('empresas'));
+            $empresas = Empresa::all();
+            return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas'));
     }
 
     public function create()
@@ -58,70 +61,41 @@ class SisCrudEmpresa extends Component
 
         $this->isOpen = true;
         $this->ruteCreate = true;
-        $this->reset('empresa', 'image');
-        $this->resetValidation();
+        $this->reset('ofertaLaboral');
+        // $this->resetValidation();
     }
+
 
     public function store()
     {
-
         $this->validate();
-        $empresaData = $this->empresa;
 
-        if (!isset($empresaData['id'])) {
-            $empresaData['user_id'] = auth()->id();
-            $empresa = Empresa::create($empresaData);
-            if ($this->image) {
-                $image = Storage::disk('public')->put('galery', $this->image);
-                $empresa->image()->create([
-                    'url' => $image
-                ]);
-            }
+        if (!isset($this->ofertaLaboral['id'])) {
+            $ofertaLaboral = ofertaLaboral::create($this->ofertaLaboral);
             $this->emit('alert', 'Registro creado satisfactoriamente');
         } else {
-
-            $empresa = Empresa::find($empresaData['id']);
-            // Si no tiene un ID de usuario, asigna el ID del usuario actual
-            $empresaData['user_id'] = $empresa->user_id ?? auth()->id();
-            $empresa->update(Arr::except($empresaData, 'image'));
-            if ($this->image) {
-                $image = Storage::disk('public')->put('galery', $this->image);
-                if ($empresa->image) {
-                    Storage::disk('public')->delete('galery', $empresa->image->url);
-                    $empresa->image()->update([
-                        'url' => $image
-                    ]);
-                } else {
-                    $empresa->image()->create([
-                        'url' => $image
-                    ]);
-                };
-            };
+            $ofertaLaboral = ofertaLaboral::find($this->ofertaLaboral['id']);
+            $ofertaLaboral->update($this->ofertaLaboral);
             $this->emit('alert', 'Registro actualizado satisfactoriamente');
         }
-
-        $this->reset(['isOpen', 'empresa', 'image']);
-        $this->emitTo('SisCrudEmpresa', 'render');
+        $this->reset(['isOpen', 'ofertaLaboral']);
+        $this->emitTo('ofertaLaborals', 'render');
     }
 
-    public function edit($empresa)
-    {
-        $this->reset('image');
-        $this->empresa = array_slice($empresa, 0, 8);
-        $this->isOpen = true;
-        $this->ruteCreate = false;
-    }
+    public function edit($ofertaLaboral)
+{
 
-    public function delete($id)
-    {
-        Empresa::find($id)->delete();
-    }
+    $this->ofertaLaboral = $ofertaLaboral;
+    $this->isOpen = true;
+    $this->ruteCreate = false;
+
+}
 
     public function destroy(string $id)
     {
         try {
-            $empresas = Empresa::findOrFail($id);
-            $empresas->delete();
+            $ofertaLaborals = OfertaLaboral::findOrFail($id);
+            $ofertaLaborals->delete();
 
             return redirect()
                 ->back()
@@ -134,30 +108,30 @@ class SisCrudEmpresa extends Component
 
     public function createPDF()
     {
-        $total = Empresa::count();
+        $total = OfertaLaboral::count();
 
         $date = date('Y-m-d');
         $hour = date('H:i:s');
-        $empresas = Empresa::all();
-        $pdf = FacadePdf::loadView('reports/pdf_empresa', compact('empresas', 'total', 'date', 'hour'));
+        $ofertaLaborals = OfertaLaboral::all();
+        $pdf = FacadePdf::loadView('reports/pdf_oferta_laboral', compact('ofertaLaborals', 'total', 'date', 'hour'));
         $pdf->setPaper('a4', 'landscape');
         //return $pdf->download('pdf_file.pdf');    //desacarga automaticamente
-        return $pdf->stream('reports/pdf_empresa'); //abre en una pestaña como pdf
+        return $pdf->stream('reports/pdf_oferta_laboral'); //abre en una pestaña como pdf
     }
 
     public function createCSV()
     {
 
-        $data = DB::table('empresas')->select('id', 'ra_social', 'ruc', 'direccion', 'telefono', 'correo', 'created_at', 'updated_at')->get();
+        $data = DB::table('oferta_laborals')->select('id', 'titulo', 'ubicacion', 'remuneracion', 'descripcion', 'body', 'fecha_inicio', 'fecha_fin', 'limite_postulante', 'empresa_id', 'created_at', 'updated_at')->get();
 
 
-        $filename = 'reporte_empresas.csv';
+        $filename = 'reporte_oferta_laboral.csv';
         $filePath = storage_path('app/' . $filename);
 
         $file = fopen($filePath, 'w');
-        fputcsv($file, ['ID', 'RAZON SOCIAL', 'RUC', 'DIRECCION', 'TELEFONO','CORREO', 'Creacion', 'Actualizado']);
+        fputcsv($file, ['ID', 'TITULO', 'UBICACION', 'REMUNERACION', 'DESCRIPCION', 'CUERPO', 'FECHA DE INICIO', 'FECHA FIN', 'LIMITE POSTULANTES', 'EMPRESA', 'Creacion', 'Actualizado']);
         foreach ($data as $item) {
-            fputcsv($file, [$item->id, $item->ra_social, $item->ruc, $item->direccion, $item->telefono,$item->correo, $item->created_at, $item->updated_at]);
+            fputcsv($file, [$item->id, $item->titulo, $item->ubicacion, $item->remuneracion, $item->descripcion, $item->body, $item->fecha_inicio, $item->fecha_fin, $item->limite_postulante, $item->empresa_id, $item->created_at, $item->updated_at]);
         }
 
         fclose($file);
@@ -167,12 +141,12 @@ class SisCrudEmpresa extends Component
     public function createEXCEL()
     {
 
-        $data = DB::table('empresas')->select('id', 'ra_social', 'ruc', 'direccion', 'telefono', 'correo', 'created_at', 'updated_at')->get()->toArray();
+        $data = DB::table('oferta_laborals')->select('id', 'titulo', 'ubicacion', 'remuneracion', 'descripcion', 'body', 'fecha_inicio', 'fecha_fin', 'limite_postulante', 'empresa_id', 'created_at', 'updated_at')->get()->toArray();
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Establecer los encabezados de las columnas
-        $encabezados = ['ID', 'RAZON SOCIAL', 'RUC', 'DIRECCION', 'TELEFONO', 'CORREO', 'Creacion', 'Actualizado'];
+        $encabezados =  ['ID', 'TITULO', 'UBICACION', 'REMUNERACION', 'DESCRIPCION', 'CUERPO', 'FECHA DE INICIO', 'FECHA FIN', 'LIMITE POSTULANTES', 'EMPRESA', 'Creacion', 'Actualizado'];
         foreach ($encabezados as $key => $encabezado) {
             $columna = chr(65 + $key); // Convertir el índice en letra de columna (A, B, C, ...)
             $celda = $columna . '1'; // Construir la referencia de celda (por ejemplo, A1, B1, C1, ...)
@@ -218,9 +192,9 @@ class SisCrudEmpresa extends Component
         ];
 
         $row = 2;
-        foreach ($data as $empresa) {
+        foreach ($data as $ofertaLaboral) {
             $style = ($row % 2 == 0) ? $dataStyle1 : $dataStyle2;
-            $sheet->fromArray((array)$empresa, null, 'A' . $row); // Escribir los datos en la fila actual
+            $sheet->fromArray((array)$ofertaLaboral, null, 'A' . $row); // Escribir los datos en la fila actual
             $sheet->getStyle('A' . $row . ':H' . $row)->applyFromArray($style); // Aplicar el estilo a la fila actual
             $row++;
         }
@@ -232,12 +206,11 @@ class SisCrudEmpresa extends Component
 
         // Crear un objeto Writer y guardar el archivo
         $writer = new Xlsx($spreadsheet);
-        $filename = 'reporte_empresas.xlsx';
+        $filename = 'reporte_oferta_laboral.xlsx';
         $filePath = storage_path('app/' . $filename);
         $writer->save($filePath);
 
         // Devolver el archivo como respuesta
         return response()->download($filePath, $filename)->deleteFileAfterSend();
     }
-
 }

@@ -97,10 +97,17 @@
         },
         {
             "url": "tabla-empresas",
-            "icon": "fa-regular fa-images",
+            "icon": "fa-solid fa-building",
             "roles": ["Administrador"],
             "name": "Empresas"
         },
+        {
+            "url": "tabla-ofertas-laborales",
+            "icon": "fa-solid fa-building",
+            "roles": ["Administrador"],
+            "name": "Oferta Laboral"
+        },
+
         {
             "url": "tabla-banners",
             "icon": "fa-regular fa-images",

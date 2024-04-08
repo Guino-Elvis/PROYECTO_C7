@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('oferta_laborals', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('descripcion');
-            $table->string('fecha_inicio');
-            $table->string('fecha_fin');
-            $table->string('remuneracion');
             $table->string('ubicacion');
-            $table->string('tipo');
-            $table->string('limite_postulante');
+            $table->string('remuneracion');
+            $table->string('descripcion');
+            $table->text('body');
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin');
+            $table->enum('state', [1, 2]); //1:escondido  2:visible
+            $table->string('limite_postulante')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');

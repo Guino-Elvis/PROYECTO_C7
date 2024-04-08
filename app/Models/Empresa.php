@@ -19,17 +19,18 @@ class Empresa extends Model
      // Relación 1 a * inversa
 public function user()
 {
-    return $this->belongsTo(User::class, 'user_id');
+    return $this->belongsTo(User::class);
 }
-// Método para establecer un valor predeterminado para user_id si no se proporciona uno
-protected static function boot()
-{
-    parent::boot();
 
-    static::creating(function ($empresa) {
-        $empresa->user_id = $empresa->user_id ?? auth()->id();
-    });
-}
+// protected static function boot()
+// {
+//     parent::boot();
+
+//     static::creating(function ($empresa) {
+//         $empresa->user_id = $empresa->user_id ?? auth()->id();
+//     });
+// }
+
        //Relación polimorfica 1 * 1
        public function image(){
         return $this->morphOne(Image::class,'imageable');

@@ -13,7 +13,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $products = Product::factory(10)->create();
+        $products = Product::factory(1)->create();
 
         foreach ($products as $product) {
             Image::factory(3)->create([
