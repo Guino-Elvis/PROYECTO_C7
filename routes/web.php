@@ -4,6 +4,7 @@ use App\Http\Livewire\AccountSettingProfile;
 use App\Http\Livewire\AccountSettingYape;
 //use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\DashboardGeneral;
+use App\Http\Livewire\PageBolsaLaboral;
 use App\Http\Livewire\SecurityPermissions;
 use App\Http\Livewire\SecurityRoles;
 use App\Http\Livewire\SisCrudEmpresa;
@@ -31,11 +32,13 @@ Route::group(
         'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
     ], function(){
 
-        Route::get('/', function () {
-            return view('welcome');
-        })->name('/');
+        // Route::get('/', function () {
+        //     return view('welcome');
+        // })->name('/');
 
 
+
+        Route::get('/', PageBolsaLaboral::class)->name('/');
         Route::middleware([
             'auth:sanctum',
             config('jetstream.auth_session'),

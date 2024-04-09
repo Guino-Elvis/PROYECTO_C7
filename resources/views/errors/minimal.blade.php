@@ -31,7 +31,7 @@
                     @yield('message')
                 </p>
 
-                <a href="{{ route('/') }}"
+                <a href="/"
                     class="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white transition-all duration-400 border border-transparent rounded-lg focus:outline-none bg-green-600 active:bg-green-600 hover:bg-green-700">
                     Volver a la página de inicio
                 </a>

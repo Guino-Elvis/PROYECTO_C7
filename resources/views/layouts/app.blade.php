@@ -5,30 +5,45 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="/img/icono.png" type="image/png">
+    <link rel="shortcut icon" href="/img/icono.png">
 
-    <title>@yield('title') | {{ config('app.name') }}</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+    <title>INFOTELPERU - Tienda Virtual</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    @include('layouts/sections/styles')
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    @include('layouts/sections/scripts')
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/js/app.js'])
 
     <!-- Styles -->
     @livewireStyles
-
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-data="{ sidebarVisible: false }">
 
-    <div class="min-h-screen bg-zinc-100">
+    <x-banner />
+
+    <div class="min-h-screen " style="background: #F0F2F5">
 
         @php
             $route = Route::getRoutes()->getByAction(request()->route()->getActionName());
@@ -37,18 +52,19 @@
         @if (Auth::user() && $route && in_array('auth:sanctum', $route->gatherMiddleware()))
             <x-sidebar>
                 <x-slot name="content">
-                    <!-- Page Content -->
                     <div>
                         {{ $slot }}
                     </div>
                 </x-slot>
             </x-sidebar>
         @else
-            @livewire('navigation-menu')
+            @livewire('navigation')
             <main>
                 {{ $slot }}
+
             </main>
         @endif
+
     </div>
 
     @stack('modals')
@@ -66,11 +82,9 @@
             )
         });
         AOS.init();
-
     </script>
 
-    <!-- Page Scripts -->
-    @yield('page-script')
+
 </body>
 
 </html>

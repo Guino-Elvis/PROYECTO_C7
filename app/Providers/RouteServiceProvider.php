@@ -17,7 +17,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/sistema/pagina/dashboard-general';
+    public const HOME = '/';
+    // public const HOME = '/sistema/pagina/dashboard-general';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
