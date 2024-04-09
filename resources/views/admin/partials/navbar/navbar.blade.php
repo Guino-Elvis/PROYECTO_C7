@@ -77,7 +77,7 @@
                     </x-slot>
                 </x-dropdown>
             </div>
-            <a href="{{ route('/') }}" target="_blank"
+            <a href="{{ route('inicio') }}" target="_blank"
                 class="flex items-center justify-center w-10 h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200">
                 <i class="fa-solid fa-globe"></i>
             </a>

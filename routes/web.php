@@ -38,7 +38,7 @@ Route::group(
 
 
 
-        Route::get('/', PageBolsaLaboral::class)->name('/');
+        Route::get('/', PageBolsaLaboral::class)->name('inicio');
         Route::middleware([
             'auth:sanctum',
             config('jetstream.auth_session'),
@@ -83,6 +83,7 @@ Route::group(
             Route::get('/ofertas_laborales/pdf', [SisCrudOfertaLaboral::class, 'createPDF']);
             Route::get('/ofertas_laborales/csv', [SisCrudOfertaLaboral::class, 'createCSV']);
             Route::get('/ofertas_laborales/excel', [SisCrudOfertaLaboral::class, 'createEXCEL']);
+
 
 
         });
