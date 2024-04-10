@@ -11,6 +11,11 @@ class PageBolsaLaboral extends Component
 
     public $primerDetalle;
 
+   public function handleClick()
+    {
+        $this->emit('iniciarPostulacion');
+    }
+
     public function mount()
     {
         // Obtener el primer detalle al cargar el componente

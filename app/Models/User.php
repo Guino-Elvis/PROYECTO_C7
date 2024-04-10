@@ -65,4 +65,15 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            // Verificar el email automáticamente al crear un nuevo usuario
+            $user->email_verified_at = now();
+        });
+    }
 }

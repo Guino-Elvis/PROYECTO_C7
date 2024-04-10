@@ -142,27 +142,3 @@
     @endif
 </div>
 
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtener el contenedor de los detalles de la oferta
-        var detalleOfertaContainer = document.getElementById('detalle-oferta-container');
-
-        // Manejar el evento clic de los enlaces de detalle de la oferta
-        document.querySelectorAll('a').forEach(function(enlace) {
-            enlace.addEventListener('click', function(evento) {
-                evento.preventDefault(); // Evitar que se cargue una nueva página al hacer clic en el enlace
-
-                var idOferta = this.getAttribute('data-id');
-
-                // Realizar una solicitud AJAX para obtener los detalles de la oferta
-                fetch('/ruta-al-endpoint?id=' + idOferta)
-                    .then(response => response.text())
-                    .then(html => {
-                        // Actualizar el contenido del contenedor de detalles de la oferta con los datos obtenidos
-                        detalleOfertaContainer.innerHTML = html;
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        });
-    });
-</script> --}}

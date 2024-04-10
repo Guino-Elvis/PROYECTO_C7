@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('status');
             $table->date('fecha_postulacion');
-            $table->string('documentos');
+            $table->longText('documentos'); // Cambiado a longText para almacenar documentos
             $table->unsignedBigInteger('oferta_laboral_id');
             $table->foreign('oferta_laboral_id')->references('id')->on('oferta_laborals')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');

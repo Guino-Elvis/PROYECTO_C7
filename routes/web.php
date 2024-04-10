@@ -85,13 +85,14 @@ Route::group(
             Route::get('/ofertas_laborales/csv', [SisCrudOfertaLaboral::class, 'createCSV']);
             Route::get('/ofertas_laborales/excel', [SisCrudOfertaLaboral::class, 'createEXCEL']);
 
-
+            Route::get('/postulacion/{id}',PagePostulacion::class)->name('detalle.postulacion');
+            Route::post('/grabar_postulacion', [PagePostulacion::class, 'save']);
 
         });
     });
 
     //PAGES
-    Route::get('/postulacion',PagePostulacion::class)->name('postulacion');
+    // Route::get('/postulacion/{id}',PagePostulacion::class)->name('detalle.postulacion');
     Route::get('/ruta-al-endpoint', [PageBolsaLaboral::class, 'obtenerDetallesOferta']);
 
 require_once __DIR__ . '/jetstream.php';
