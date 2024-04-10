@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/inicio',
+    'home' => '/',
     // 'home' => '/sistema/pagina/dashboard-general',
 
     /*

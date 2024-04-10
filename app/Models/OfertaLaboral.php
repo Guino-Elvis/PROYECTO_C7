@@ -20,6 +20,7 @@ class OfertaLaboral extends Model
         'limite_postulante',
         'state',
         'empresa_id',
+        'category_id',
         'user_id'
     ];
 
@@ -33,4 +34,15 @@ class OfertaLaboral extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+        //Relación 1 a *
+        public function aplication()
+        {
+            return $this->hasMany(Application::class);
+        }
 }

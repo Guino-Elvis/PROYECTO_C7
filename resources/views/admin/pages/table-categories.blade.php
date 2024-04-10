@@ -60,6 +60,7 @@
                     <thead class="bg-indigo-600 text-white">
                         <tr class="text-center text-xs font-bold uppercase">
                             <td scope="col" class="px-6 py-3">ID</td>
+                            <td scope="col" class="px-6 py-3">Imagen</td>
                             <td scope="col" class="px-6 py-3">Nombre</td>
                             <td scope="col" class="px-6 py-3">Slug</td>
                             <td scope="col" class="px-6 py-3">Estado</td>
@@ -70,13 +71,17 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-300 bg-white">
-                        @foreach ($categories as $index => $category)
+                        @foreach ($categories as $category)
                             <tr class="text-sm font-medium text-gray-900 hover:bg-gray-100">
                                 <td class="px-4 py-2">
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-600 text-white">
-                                        {{ $index + 1 }}
+                                        {{ $category->id }}
                                     </span>
+                                </td>
+                                <td class="p-2">
+                                    <img class="w-24 h-24 object-cover rounded-lg"
+                                        src="{{ $category->image ? Storage::url($category->image->url) : '/img/default.jpg' }}" />
                                 </td>
                                 <td class="px-4 py-2 text-center">{{ $category->name }}</td>
                                 <td class="px-4 py-2 text-center">{{ $category->slug }}</td>

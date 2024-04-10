@@ -5,6 +5,7 @@ use App\Http\Livewire\AccountSettingYape;
 //use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\DashboardGeneral;
 use App\Http\Livewire\PageBolsaLaboral;
+use App\Http\Livewire\PagePostulacion;
 use App\Http\Livewire\SecurityPermissions;
 use App\Http\Livewire\SecurityRoles;
 use App\Http\Livewire\SisCrudEmpresa;
@@ -37,8 +38,8 @@ Route::group(
         // })->name('/');
 
 
-
         Route::get('/', PageBolsaLaboral::class)->name('inicio');
+
         Route::middleware([
             'auth:sanctum',
             config('jetstream.auth_session'),
@@ -89,6 +90,9 @@ Route::group(
         });
     });
 
+    //PAGES
+    Route::get('/postulacion',PagePostulacion::class)->name('postulacion');
+    Route::get('/ruta-al-endpoint', [PageBolsaLaboral::class, 'obtenerDetallesOferta']);
 
 require_once __DIR__ . '/jetstream.php';
 require_once __DIR__ . '/fortify.php';

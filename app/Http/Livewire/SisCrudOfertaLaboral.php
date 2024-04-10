@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Category;
 use App\Models\Empresa;
 use Livewire\Component;
 use App\Models\OfertaLaboral;
@@ -24,7 +25,7 @@ class SisCrudOfertaLaboral extends Component
 
     public $isOpen = false;
     public $ruteCreate = false;
-    public $ofertaLaboralState, $ofertaLaboralEmpresa;
+    public $ofertaLaboralState,$ofertaLaboralCategory, $ofertaLaboralEmpresa;
     public  $amount = 5;
     public $search, $ofertaLaboral;
     public $images = [];
@@ -41,6 +42,7 @@ class SisCrudOfertaLaboral extends Component
         'ofertaLaboral.limite_postulante' => 'required',
         'ofertaLaboral.state' => 'required',
         'ofertaLaboral.empresa_id' => 'required',
+        'ofertaLaboral.category_id' => 'required',
 
     ];
 
@@ -50,11 +52,13 @@ class SisCrudOfertaLaboral extends Component
         $ofertaLaborals = OfertaLaboral::where('titulo', 'like', '%' . $this->search . '%')
             ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
             ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
+            ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory))
             ->latest('id')
             ->paginate($this->amount);
-         
+
             $empresas = Empresa::all();
-            return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas'));
+            $categories = Category::all();
+            return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas','categories'));
     }
 
     public function create()
@@ -88,10 +92,10 @@ class SisCrudOfertaLaboral extends Component
 
     $this->ofertaLaboral = $ofertaLaboral;
     // $this->ofertaLaboral = array_slice($ofertaLaboral, 0, 7);
-    
+
     $this->isOpen = true;
     $this->ruteCreate = false;
-   
+
 
 }
 

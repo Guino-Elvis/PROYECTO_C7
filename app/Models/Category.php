@@ -28,4 +28,17 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    //Relación 1 a *
+    public function of_lavoral()
+    {
+        return $this->hasMany(OfertaLaboral::class);
+    }
+
+        //Relación 1 a 1 polimorfica
+    //Se pasa la clase y el metodo definido
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }
