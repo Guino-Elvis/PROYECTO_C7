@@ -81,4 +81,24 @@ class User extends Authenticatable
             $user->assignRole('Cliente');
         });
     }
+
+
+    //Relación de 1 a *
+    public function Aplication()
+    {
+        return $this->hasMany(Application::class);
+    }
+
+
+    public function postulante()
+
+    {
+        return $this->hasMany(Postulante::class);
+    }
+
+    public function oferta_laboral()
+
+    {
+        return $this->hasMany(OfertaLaboral::class);
+    }
 }

@@ -89,12 +89,7 @@
             "roles": ["Administrador"],
             "name": "Categorias"
         },
-        {
-            "url": "tabla-productos",
-            "icon": "fa-solid fa-cart-flatbed-suitcase",
-            "roles": ["Administrador"],
-            "name": "Productos"
-        },
+
         {
             "url": "tabla-empresas",
             "icon": "fa-solid fa-building",
@@ -125,15 +120,15 @@
             "name": "Entregas"
         },
         {
-            "name": "Registro de ventas",
+            "name": "Registro de Postulaciones",
             "icon": "fa-solid fa-folder-tree",
             "roles": ["Administrador"],
             "submenu": [
                 {
-                    "url": "registro-de-ventas",
-                    "name": "Ventas",
+                    "url": "registro-de-postulaciones",
+                    "name": "Postulaciones",
                     "roles": ["Administrador"],
-                    "slug": "registro-de-ventas"
+                    "slug": "registro-de-postulaciones"
                 },
                 {
                     "url": "registro-de-ventas-pagos-yape",
@@ -154,10 +149,10 @@
             "roles": ["Cliente"]
         },
         {
-            "url": "tabla-venta-clientes",
+            "url": "registro-de-postulaciones",
             "icon": "fa-solid fa-rectangle-list",
             "roles": ["Cliente"],
-            "name": "Compras"
+            "name": "Mis postulaciones"
         },
         {
             "url": "registro-de-compras-pagos-yape",

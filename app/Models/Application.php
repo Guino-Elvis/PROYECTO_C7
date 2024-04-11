@@ -18,4 +18,10 @@ class Application extends Model
     {
         return $this->belongsTo(Postulante::class);
     }
+
+    // Relación de * a uno
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

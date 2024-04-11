@@ -10,6 +10,7 @@ use App\Http\Livewire\PagePostulante;
 use App\Http\Livewire\PageResulPostulacion;
 use App\Http\Livewire\SecurityPermissions;
 use App\Http\Livewire\SecurityRoles;
+use App\Http\Livewire\SisCrudAplication;
 use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\SisCrudOfertaLaboral;
 use App\Http\Livewire\SisCrudPostulante;
@@ -72,7 +73,7 @@ Route::group(
 
             Route::get('/sistema/pagina/tabla-venta-clientes', SisCrudPostulante::class)->name('tabla-venta-clientes');
             Route::get('/sistema/pagina/tabla-venta-entregas', AccountSettingProfile::class)->name('tabla-venta-entregas');
-            Route::get('/sistema/pagina/registro-de-ventas-listado-de-ventas', AccountSettingProfile::class)->name('registro-de-ventas');
+            Route::get('/sistema/pagina/registro-de-postulaciones-listado-de-postulaciones', SisCrudAplication::class)->name('registro-de-postulaciones');
             Route::get('/sistema/pagina/registro-de-ventas-pagos-yape', AccountSettingProfile::class)->name('registro-de-ventas-pagos-yape');
             Route::get('/sistema/pagina/registro-de-ventas-productos-vendidos', AccountSettingProfile::class)->name('registro-de-ventas-productos-vendidos');
 
