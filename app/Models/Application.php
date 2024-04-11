@@ -9,8 +9,13 @@ class Application extends Model
 {
     use HasFactory;
 
-    public function of_laboral()
+    public function oferta_laboral()
     {
         return $this->belongsTo(OfertaLaboral::class);
+    }
+
+    public function postulante()
+    {
+        return $this->belongsTo(Postulante::class);
     }
 }

@@ -8,7 +8,7 @@
     <link rel="icon" href="/img/icono.png" type="image/png">
     <link rel="shortcut icon" href="/img/icono.png">
 
-    <title>INFOTELPERU - Tienda Virtual</title>
+    <title>BOLSALABORAL - Ofertas Laborales</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -27,9 +27,13 @@
 
     <link rel="stylesheet" href="/css/styles.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
+
+   {{-- notificaciones push --}}
+    <link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
+    <script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/js/app.js'])

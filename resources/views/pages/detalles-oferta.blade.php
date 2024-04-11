@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="flex flex-row gap-4 py-4">
-        <a href="{{ route('detalle.postulacion', ['id' => $detalles->id]) }}" class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
+        <a href="{{ route('postulante', ['id' => $detalles->id]) }}" class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
             ahora</a>
         <a href="" class="rounded-lg py-2 px-4 text-gray-800 bg-gray-300 font-bold"><i
                 class="fa-regular fa-bookmark"></i></a>
@@ -108,7 +108,7 @@
 
 
 
-{{-- <script>
+<script>
     const scrollableDiv = document.getElementById('scrollableDiv');
     const divA = document.getElementById('divA');
     const divB = document.getElementById('divB');
@@ -152,4 +152,4 @@
             isDivCVisible = false;
         }
     });
-</script> --}}
+</script>

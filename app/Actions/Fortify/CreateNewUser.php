@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Yoeunes\Toastr\Facades\Toastr;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -31,7 +32,8 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
+
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'apellido_p' => $input['apellido_p'],
@@ -39,8 +41,12 @@ class CreateNewUser implements CreatesNewUsers
             'dni' => $input['dni'],
             'direccion' => $input['direccion'],
             'telefono' => $input['telefono'],
-
             'password' => Hash::make($input['password']),
         ]);
+
+        // Mostrar notificación Toastr de éxito
+        Toastr::success('¡Registro exitoso! Ahora puedes iniciar sesión.', '¡Bienvenido!');
+
+        return $user;
     }
 }

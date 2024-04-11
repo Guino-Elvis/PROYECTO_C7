@@ -109,20 +109,14 @@
         },
 
         {
-            "url": "tabla-banners",
-            "icon": "fa-regular fa-images",
-            "roles": ["Administrador"],
-            "name": "Banners"
-        },
-        {
-            "menuHeader": "SALES & CLIENTS",
+            "menuHeader": "SALES & POSTULANTES",
             "roles": ["Administrador"]
         },
         {
             "url": "tabla-venta-clientes",
             "icon": "fa-solid fa-restroom",
             "roles": ["Administrador"],
-            "name": "Clientes"
+            "name": "Postulantes"
         },
         {
             "url": "tabla-venta-entregas",
@@ -160,7 +154,7 @@
             "roles": ["Cliente"]
         },
         {
-            "url": "registro-de-compras",
+            "url": "tabla-venta-clientes",
             "icon": "fa-solid fa-rectangle-list",
             "roles": ["Cliente"],
             "name": "Compras"

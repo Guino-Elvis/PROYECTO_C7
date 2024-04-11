@@ -75,5 +75,10 @@ class User extends Authenticatable
             // Verificar el email automáticamente al crear un nuevo usuario
             $user->email_verified_at = now();
         });
+
+        static::created(function ($user) {
+            // Asignar el rol de "Cliente" al usuario creado
+            $user->assignRole('Cliente');
+        });
     }
 }

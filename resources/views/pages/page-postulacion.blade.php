@@ -2,26 +2,85 @@
 
     <div class="max-w-7xl mx-auto p-6 lg:p-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-2 bg-white px-5 py-5 rounded-lg shadow-md shadow-gray-400">
+                <div class="w-11/12 lg:w-2/6 mx-[auto] pb-5">
+                    <div class="bg-gray-200 h-1 flex items-center justify-between">
+                        <div class="w-2/3 bg-indigo-700 h-1 flex items-center">
+                            <div class="bg-indigo-700 h-6 w-6 rounded-full shadow flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="18"
+                                    height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFFFFF" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <path d="M5 12l5 5l10 -10" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-2/3 flex justify-between h-1 items-center relative">
+
+                            <div class="bg-white h-6 w-6 rounded-full shadow flex items-center justify-center -mr-3 relative">
+                                <div class="h-3 w-3 animate-pulse bg-indigo-700 rounded-full"></div>
+                            </div>
+
+                        </div>
+                        <div class="w-1/3 flex justify-end">
+                            <div class="bg-white h-6 w-6 rounded-full shadow"></div>
+                        </div>
+                    </div>
+                </div>
                 <div>
-                    <form action="/grabar_postulacion" method="POST" enctype="multipart/form-data">
+                    <div class="flex justify-center items-center">
+                        <span class="py-5 text-center text-xl font-bold">Datos del postulante</span>
+                    </div>
+
+
+                    <div class="bg-white px-2 py-2 rounded-lg shadow-md shadow-gray-400">
+                        <div class="text-gray-600  rounded-lg p-2 flex flex-row gap-4">
+                            <span class="text-black font-bold">Nombre : </span>
+                            <div>
+                                {{$postulante->name }}{{$postulante->paterno }}{{$postulante->materno }}
+                            </div>
+                        </div>
+                        <div class="text-gray-600  rounded-lg p-2 flex flex-row gap-4">
+                            <span class="text-black font-bold">Documento de identidad : </span>
+                            <div>
+                                {{$postulante->document }}
+                            </div>
+                        </div>
+                        <div class="text-gray-600  rounded-lg p-2 flex flex-row gap-4">
+                            <span class="text-black font-bold">Telefono : </span>
+                            <div>
+                                {{$postulante->phone }}
+                            </div>
+                        </div>
+
+                        <div class="text-gray-600  rounded-lg p-2 flex flex-row gap-4">
+                            <span class="text-black font-bold">Correo Electronico : </span>
+                            <div>
+                                {{$postulante->email }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <form action="{{ route('grabar.postulacion_result') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                             <div class="w-full md:w-6/12 px-3 mb-6 md:mb-0">
                                 <label >
                                     documento
                                 </label>
-                                <input type="file" name="documentos" accept=".pdf, .doc, .docx, .txt">
+                                <input type="file" name="documentos" accept=".pdf, .doc, .docx, .txt"  required>
                             </div>
                             <!-- Agrega un identificador al input para que podamos seleccionarlo fácilmente -->
                             <input id="fecha_postulacion" name="fecha_postulacion" type="hidden">
                             <input type="hidden" name="oferta_laboral_id" value="{{ $detalles->id }}">
                             <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-                            <div class="flex items-end justify-end  py-2">
-                                <button type="submit" class="ad m-2">
+                            <div class="flex items-end justify-end  gap-5 px-10 py-10">
+                                <button type="submit" class="rounded-full text-blue-400 border-2 border-blue-400 font-bold px-8 py-1.5  hover:text-white  hover:bg-blue-400">
                                     Guardar
                                 </button>
-                                <a href="/"class="m-2">Cancelar</a>
+                                <a href="/"class="rounded-full bg-blue-400 text-white font-bold px-8 py-2 hover:bg-transparent hover:text-blue-400 hover:border-2 hover:border-blue-400">Cancelar</a>
+
                             </div>
                     </form>
                 </div>

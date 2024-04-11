@@ -11,6 +11,15 @@
                 {{ session('status') }}
             </div>
         @endif
+<!-- Aquí incluimos el script para mostrar el Toastr -->
+@push('scripts')
+    <script>
+        // Mostrar el Toastr una vez que la página se haya cargado completamente
+        document.addEventListener('DOMContentLoaded', function () {
+            toastr.error('Para continuar, necesitas Iniciar Sesión', 'Error');
+        });
+    </script>
+@endpush
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
@@ -48,3 +57,4 @@
         </form>
     </x-authentication-card>
 </x-guest-layout>
+

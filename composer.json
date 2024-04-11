@@ -18,7 +18,8 @@
         "mcamara/laravel-localization": "^2.0",
         "phpoffice/phpspreadsheet": "^2.0",
         "spatie/laravel-permission": "^6.4",
-        "stichoza/google-translate-php": "^5.1"
+        "stichoza/google-translate-php": "^5.1",
+        "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

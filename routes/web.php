@@ -6,10 +6,13 @@ use App\Http\Livewire\AccountSettingYape;
 use App\Http\Livewire\DashboardGeneral;
 use App\Http\Livewire\PageBolsaLaboral;
 use App\Http\Livewire\PagePostulacion;
+use App\Http\Livewire\PagePostulante;
+use App\Http\Livewire\PageResulPostulacion;
 use App\Http\Livewire\SecurityPermissions;
 use App\Http\Livewire\SecurityRoles;
 use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\SisCrudOfertaLaboral;
+use App\Http\Livewire\SisCrudPostulante;
 use App\Http\Livewire\TableCategories;
 use App\Http\Livewire\TableProducts;
 use App\Http\Livewire\TableUsers;
@@ -67,7 +70,7 @@ Route::group(
 
             Route::get('/sistema/pagina/tabla-banners', AccountSettingProfile::class)->name('tabla-banners');
 
-            Route::get('/sistema/pagina/tabla-venta-clientes', AccountSettingProfile::class)->name('tabla-venta-clientes');
+            Route::get('/sistema/pagina/tabla-venta-clientes', SisCrudPostulante::class)->name('tabla-venta-clientes');
             Route::get('/sistema/pagina/tabla-venta-entregas', AccountSettingProfile::class)->name('tabla-venta-entregas');
             Route::get('/sistema/pagina/registro-de-ventas-listado-de-ventas', AccountSettingProfile::class)->name('registro-de-ventas');
             Route::get('/sistema/pagina/registro-de-ventas-pagos-yape', AccountSettingProfile::class)->name('registro-de-ventas-pagos-yape');
@@ -85,12 +88,18 @@ Route::group(
             Route::get('/ofertas_laborales/csv', [SisCrudOfertaLaboral::class, 'createCSV']);
             Route::get('/ofertas_laborales/excel', [SisCrudOfertaLaboral::class, 'createEXCEL']);
 
-            Route::get('/postulacion/{id}',PagePostulacion::class)->name('detalle.postulacion');
-            Route::post('/grabar_postulacion', [PagePostulacion::class, 'save']);
+            //PAGES
+            Route::get('/postulacion/{id}', PagePostulacion::class)->name('detalle.postulacion');
+            Route::post('/grabar_postulacion_postulacion', [PagePostulacion::class, 'save'])->name('grabar.postulacion_result');
+
+            Route::get('/postulante/{id}', PagePostulante::class)->name('postulante');
+            Route::post('/grabar_postulacion_postulante/{id}', [PagePostulante::class, 'save_postulante'])->name('grabar.postulante');
+
+
 
         });
     });
-
+    Route::get('/resultado-de-postulacion/{id}', PageResulPostulacion::class)->name('resultado.postulacion');
     //PAGES
     // Route::get('/postulacion/{id}',PagePostulacion::class)->name('detalle.postulacion');
     Route::get('/ruta-al-endpoint', [PageBolsaLaboral::class, 'obtenerDetallesOferta']);
