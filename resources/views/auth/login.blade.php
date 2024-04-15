@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <x-authentication-card>
+    <!-- <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
         </x-slot>
@@ -52,174 +52,178 @@
         </form>
 
 
-    </x-authentication-card>
+    </x-authentication-card> -->
 
 
+    <div class="contenedor">
+        <div class=" flex justify-center items-center">
+            <div class="container px-auto py-40">
 
-    <div class="login-wrap">
-        <div class="login-html">
-            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1"
-                class="tab">Sign In</label>
-            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2"
-                class="tab">Sign
-                Up</label>
-            <div class="login-form">
+                <div class="login-wrap">
+                    <div class="login-html px-10 py-14">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign
+                            Up</label>
+                        <div class="login-form">
 
-                <div class="sign-in-htm">
-                    <x-validation-errors class="mb-4 bg-white rounded-xl px-5 py-5" />
+                            <div class="sign-in-htm">
+                                <x-validation-errors class="mb-4 bg-white rounded-xl px-5 py-5" />
 
-                    @if (session('status'))
-                        <div class="mb-4 font-medium text-sm text-green-600">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="group">
-                            <label class="label" for="email" value="{{ __('Email') }}">Correo electrónico</label>
-                            <input id="email" type="email" name="email" :value="old('email')" required
-                                autofocus autocomplete="username" class="input" />
-                        </div>
-                        <div class="group">
-                            <label for="password" value="{{ __('Password') }}" class="label">Password</label>
-                            <input id="password" class="input" type="password" name="password" required
-                                autocomplete="current-password">
+                                @if (session('status'))
+                                <div class="mb-4 font-medium text-sm text-green-600">
+                                    {{ session('status') }}
+                                </div>
+                                @endif
+                                <form method="POST" action="{{ route('login') }}">
+                                    @csrf
 
-                        </div>
-                        <div class="block mt-4 mb-4">
-                            <label for="remember_me" class="flex items-center">
-                                <x-checkbox id="remember_me" name="remember" />
-                                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                            </label>
-                        </div>
-                        <div class="group">
-                            <input type="submit" class="button" style="cursor: pointer;" value="Iniciar sesion">
-                        </div>
-                        <div class="hr"></div>
+                                    <div class="group">
+                                        <label class="label" for="email" value="{{ __('Email') }}">Correo electrónico</label>
+                                        <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" class="input" />
+                                    </div>
+                                    <div class="group">
+                                        <label for="password" value="{{ __('Password') }}" class="label">Password</label>
+                                        <input id="password" class="input" type="password" name="password" required autocomplete="current-password">
 
-                        @if (Route::has('password.request'))
-                            <div class="foot-lnk">
-                                <a class="underline text-xl text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                    href="{{ route('password.request') }}">
-                                    {{ __('Forgot your password?') }}
-                                </a>
+                                    </div>
+
+                                    <div class="block mt-4 mb-4">
+                                        <label for="remember_me" class="flex items-center">
+                                            <x-checkbox id="remember_me" name="remember" />
+                                            <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                                        </label>
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" style="cursor: pointer;" value="Iniciar sesion">
+                                    </div>
+                                    <div class="hr"></div>
+
+                                    @if (Route::has('password.request'))
+                                    <div class="foot-lnk">
+                                        <a class="underline text-xl text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                                            {{ __('Forgot your password?') }}
+                                        </a>
+                                    </div>
+                                    @endif
+                                </form>
                             </div>
-                        @endif
-                    </form>
-                </div>
 
-                <div class="sign-up-htm flex w-auto h-full">
-                    <x-validation-errors class="mb-4 bg-white rounded-xl px-5 py-5" />
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-                        <div class="group">
-                            <label for="name" value="{{ __('Name') }}" class="label">Username</label>
-                            <input id="name" type="text" name="name" :value="old('name')" required
-                                autofocus autocomplete="name" class="input">
-                        </div>
-                        <div class="group">
-                            <label for="email" value="{{ __('Email') }}" class="label">Email</label>
-                            <input id="email" type="email" name="email" :value="old('email')" required
-                                autocomplete="username" class="input">
-                        </div>
-                        <div class="flex flex-row gap-4">
-                            <div class="group">
-                                <label for="apellido_p" value="{{ __('Apellido Paterno') }}" class="label">Apellido
-                                    Paterno</label>
-                                <input id="apellido_p" type="text" name="apellido_p" :value="old('apellido_p')"
-                                    required autocomplete="name" class="input">
-                            </div>
-                            <div class="group">
-                                <label for="apellido_m" value="{{ __('Apellido Materno') }}" class="label">Apellido
-                                    Materno</label>
-                                <input id="apellido_m" type="text" name="apellido_m" :value="old('apellido_m')"
-                                    required autocomplete="name" class="input">
-                            </div>
-                        </div>
+                            <div class="sign-up-htm flex w-auto h-full">
+                                <x-validation-errors class="mb-4 bg-white rounded-xl px-5 py-5" />
+                                <form method="POST" action="{{ route('register') }}">
+                                    @csrf
+                                    <div class="flex flex-row gap-4">
+                                        <div class="group">
+                                            <label for="name" value="{{ __('Name') }}" class="label">Username</label>
+                                            <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" class="input">
+                                        </div>
+                                        <div class="group">
+                                            <label for="email" value="{{ __('Email') }}" class="label">Email</label>
+                                            <input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" class="input">
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-row gap-4">
+                                        <div class="group">
+                                            <label for="apellido_p" value="{{ __('Apellido Paterno') }}" class="label">Apellido
+                                                Paterno</label>
+                                            <input id="apellido_p" type="text" name="apellido_p" :value="old('apellido_p')" required autocomplete="name" class="input">
+                                        </div>
+                                        <div class="group">
+                                            <label for="apellido_m" value="{{ __('Apellido Materno') }}" class="label">Apellido
+                                                Materno</label>
+                                            <input id="apellido_m" type="text" name="apellido_m" :value="old('apellido_m')" required autocomplete="name" class="input">
+                                        </div>
+                                    </div>
 
-                        <div class="group">
-                            <label for="direccion" value="{{ __('Direccion') }}" class="label">Direccion</label>
-                            <input id="direccion"  type="text" name="direccion"
-                            :value="old('direccion')"
-                            required autocomplete="direccion" class="input">
-                        </div>
+                                    <div class="group">
+                                        <label for="direccion" value="{{ __('Direccion') }}" class="label">Direccion</label>
+                                        <input id="direccion" type="text" name="direccion" :value="old('direccion')" required autocomplete="direccion" class="input">
+                                    </div>
 
-                        <div class="flex flex-row gap-4">
-                            <div class="group">
-                                <label for="dni" value="{{ __('DNI') }}" class="label">DNI</label>
-                                <input id="dni"  type="text" name="dni"
-                                    :value="old('dni')" required autocomplete="dni" class="input">
-                            </div>
-                            <div class="group">
-                                <label for="telefono" value="{{ __('Telefono') }}" class="label">Telefono</label>
-                                <input id="telefono"  type="text" name="telefono"
-                                    :value="old('telefono')" required autocomplete="telefono" class="input">
-                            </div>
-                        </div>
+                                    <div class="flex flex-row gap-4">
+                                        <div class="group">
+                                            <label for="dni" value="{{ __('DNI') }}" class="label">DNI</label>
+                                            <input id="dni" type="text" name="dni" :value="old('dni')" required autocomplete="dni" class="input">
+                                        </div>
+                                        <div class="group">
+                                            <label for="telefono" value="{{ __('Telefono') }}" class="label">Telefono</label>
+                                            <input id="telefono" type="text" name="telefono" :value="old('telefono')" required autocomplete="telefono" class="input">
+                                        </div>
+                                    </div>
 
-                        <div class="group">
-                            <label for="password" value="{{ __('Password') }}" class="label">Password</label>
-                            <input id="password"  type="password" name="password" required
-                                autocomplete="new-password" class="input">
-                        </div>
-                        <div class="group">
-                            <label for="password_confirmation" value="{{ __('Confirm Password') }}"
-                                class="label">Confirm Password</label>
-                            <input id="password_confirmation"  type="password"
-                                name="password_confirmation" required autocomplete="new-password" class="input">
-                        </div>
-                        @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                            <div class="mt-4">
-                                <x-label for="terms">
-                                    <div class="flex items-center">
-                                        <x-checkbox name="terms" id="terms" required />
+                                    <div class="group">
+                                        <label for="password" value="{{ __('Password') }}" class="label">Password</label>
+                                        <input id="password" type="password" name="password" required autocomplete="new-password" class="input">
+                                    </div>
+                                    <div class="group">
+                                        <label for="password_confirmation" value="{{ __('Confirm Password') }}" class="label">Confirm Password</label>
+                                        <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="input">
+                                    </div>
+                                    @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+                                    <div class="mt-4">
+                                        <x-label for="terms">
+                                            <div class="flex items-center">
+                                                <x-checkbox name="terms" id="terms" required />
 
-                                        <div class="ml-2">
-                                            {!! __('Acepto los :terms_of_service y :privacy_policy', [
-                                                'terms_of_service' =>
+                                                <div class="ml-2">
+                                                    {!! __('Acepto los :terms_of_service y :privacy_policy', [
+                                                    'terms_of_service' =>
                                                     '<a target="_blank" href="' .
                                                     route('terms.show') .
                                                     '" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
-                                                    __('Términos de servicio') .
-                                                    '</a>',
-                                                'privacy_policy' =>
+                                                        __('Términos de servicio') .
+                                                        '</a>',
+                                                    'privacy_policy' =>
                                                     '<a target="_blank" href="' .
                                                     route('policy.show') .
                                                     '" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
-                                                    __('Política de privacidad') .
-                                                    '</a>',
-                                            ]) !!}
-                                        </div>
+                                                        __('Política de privacidad') .
+                                                        '</a>',
+                                                    ]) !!}
+                                                </div>
+                                            </div>
+                                        </x-label>
                                     </div>
-                                </x-label>
-                            </div>
-                        @endif
-                        <div class="group">
-                            <input type="submit" class="button" value="Registrar" style="cursor: pointer;">
-                        </div>
+                                    @endif
+                                    <div class="group">
+                                        <input type="submit" class="button" value="Registrar" style="cursor: pointer;">
+                                    </div>
 
-                        <div class="hr"></div>
-                        <div class="foot-lnk">
-                            <a href="{{ route('login') }}">¿Ya estas registrado?</a>
+                                    <div class="hr"></div>
+                                    <div class="foot-lnk">
+                                        <a href="{{ route('login') }}">¿Ya estas registrado?</a>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </x-guest-layout>
 
 
 
 
 <style>
-    body {
-        margin: 0;
+
+.contenedor{
+    background-image: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+    /* .contenedor {
         color: #6a6f8c;
-        background: #c8c8c8;
         font: 600 16px/18px 'Open Sans', sans-serif;
-    }
+        width: 100%;
+        margin: auto;
+        background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
+      
+    } */
 
     *,
     :after,
@@ -246,18 +250,20 @@
     .login-wrap {
         width: 100%;
         margin: auto;
-        max-width: 525px;
-        min-height: 670px;
+        max-width: 32rem;
+        min-height: 50rem;
         position: relative;
         background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
         box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
     }
 
+
+
     .login-html {
         width: 100%;
         height: 100%;
         position: absolute;
-        padding: 90px 70px 50px 70px;
+        
         background: rgba(40, 57, 101, .9);
     }
 
@@ -308,7 +314,7 @@
     }
 
     .login-form .group {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .login-form .group .label,
@@ -399,7 +405,7 @@
 
     .hr {
         height: 2px;
-        margin: 60px 0 50px 0;
+        margin: 25px 0 50px 0;
         background: rgba(255, 255, 255, .2);
     }
 
