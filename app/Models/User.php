@@ -76,10 +76,10 @@ class User extends Authenticatable
             $user->email_verified_at = now();
         });
 
-        static::created(function ($user) {
-            // Asignar el rol de "Cliente" al usuario creado
-            $user->assignRole('Cliente');
-        });
+        // static::created(function ($user) {
+        //     // Asignar el rol de "Cliente" al usuario creado
+        //     $user->assignRole('Cliente');
+        // });
     }
 
 

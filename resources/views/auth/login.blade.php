@@ -53,15 +53,13 @@
 
 
     </x-authentication-card> -->
-
-
     <div class="contenedor">
         <div class="gradiante">
             <div class=" flex justify-center items-center">
-                <div class="container px-auto py-40">
+                <div class="container px-auto pt-20 ">
 
                     <div class="login-wrap">
-                        <div class="login-html px-10 py-14">
+                        <div class="login-html px-10 py-10">
                             <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label
                                 for="tab-1" class="tab">Sign In</label>
                             <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2"
@@ -108,7 +106,7 @@
 
                                         @if (Route::has('password.request'))
                                             <div class="foot-lnk">
-                                                <a class="underline text-xl text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                <a class="underline text-sm text-gray-200 hover:text-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                     href="{{ route('password.request') }}">
                                                     {{ __('Forgot your password?') }}
                                                 </a>
@@ -244,25 +242,25 @@
 
 <style>
     .contenedor {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background-image: url('https://www.shutterstock.com/image-photo/review-contract-report-business-woman-600nw-2197738025.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-}
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background-image: url('https://www.shutterstock.com/image-photo/review-contract-report-business-woman-600nw-2197738025.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+    }
 
-.gradiante {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background: rgba(40, 57, 101, 0.801);
-}
+    .gradiante {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: rgba(40, 57, 101, 0.801);
+    }
 
     /* .contenedor {
         color: #6a6f8c;
@@ -298,10 +296,10 @@
     .login-wrap {
         width: 100%;
         margin: auto;
-        max-width: 32rem;
-        min-height: 50rem;
+        max-width: 25rem;
+        min-height: 46rem;
         position: relative;
-        background: url(https://thumbs.dreamstime.com/z/figuras-geom%C3%A9tricas-abstractas-en-fondo-azul-marino-tex-incons%C3%BAtil-56933301.jpg) no-repeat center ;
+        background: url(https://thumbs.dreamstime.com/z/figuras-geom%C3%A9tricas-abstractas-en-fondo-azul-marino-tex-incons%C3%BAtil-56933301.jpg) no-repeat center;
         box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
     }
 
@@ -309,7 +307,6 @@
         width: 100%;
         height: 100%;
         position: absolute;
-
         background: rgba(40, 57, 101, .9);
     }
 
@@ -344,6 +341,7 @@
         margin: 0 15px 10px 0;
         display: inline-block;
         border-bottom: 2px solid transparent;
+        color: rgb(91, 91, 233);
     }
 
     .login-html .sign-in:checked+.tab,
@@ -353,7 +351,7 @@
     }
 
     .login-form {
-        min-height: 345px;
+        min-height: 250px;
         position: relative;
         perspective: 1000px;
         transform-style: preserve-3d;
@@ -374,7 +372,7 @@
     .login-form .group .input,
     .login-form .group .button {
         border: none;
-        padding: 15px 20px;
+        padding: 10px 15px;
         border-radius: 25px;
         background: rgba(255, 255, 255, .1);
     }

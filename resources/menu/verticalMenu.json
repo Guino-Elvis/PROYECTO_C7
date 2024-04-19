@@ -62,6 +62,19 @@
             ]
         },
         {
+            "url": "tabla-empresas",
+            "icon": "fa-solid fa-building",
+            "roles": ["Empresa"],
+            "name": "Empresa"
+        },
+        {
+            "url": "tabla-ofertas-laborales",
+            "icon": "fa-solid fa-building",
+            "roles": ["Empresa"],
+            "name": "Oferta Laboral"
+        },
+
+        {
             "url": "favoritos",
             "icon": "fa-solid fa-heart",
             "roles": ["Cliente"],

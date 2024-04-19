@@ -58,6 +58,23 @@
                             </div>
                         </div>
 
+                        <div class="flex-auto px-7">
+                            <x-label value="Asignar usuario" class="font-bold" />
+                            <x-select wire:model="empresa.user_id">
+                                <x-slot name="options">
+                                    <option value="" selected>Seleccione...</option>
+                                    @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ $user['user_id'] ?? '' == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                    @endforeach
+                                </x-slot>
+                            </x-select>
+                            @error('empresa.user_id')
+                            <div class="text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="flex  justify-center">
                             <div class="w-full px-6">
                                 <x-label value="Imagen" class="font-bold" />

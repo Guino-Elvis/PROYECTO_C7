@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Empresa;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -33,24 +34,58 @@ class SisCrudEmpresa extends Component
         'empresa.direccion' => 'required',
         'empresa.telefono' => 'required',
         'empresa.correo' => 'required',
-        // 'empresa.user_id' => 'required'
+        'empresa.user_id' => 'required'
     ];
 
     public function render()
     {
-        $empresas = Empresa::query()
-            ->with('user.roles')
-            ->where(function ($query) {
-                $query->where('ra_social', 'like', '%' . $this->search . '%')
+        // $empresas = Empresa::query()
+        //     ->with('user.roles')
+        //     ->where(function ($query) {
+        //         $query->where('ra_social', 'like', '%' . $this->search . '%')
+        //             ->orWhere('ruc', 'like', '%' . $this->search . '%')
+        //             ->orWhere('correo', 'like', '%' . $this->search . '%');
+        //     })
+
+
+        //     ->latest('id')
+        //     ->paginate($this->amount);
+        // $users=User::all();
+
+        $userId = Auth::id();
+        $user = User::find($userId);
+
+        // Obtener los roles del usuario
+        $roles = $user->roles->pluck('name')->toArray();
+
+        // Inicializar la consulta de aplicaciones
+        $query = Empresa::query();
+
+          // Aplicar condiciones según los roles del usuario
+          if (in_array('Administrador', $roles)) {
+            // Si el usuario tiene el rol Administrador, mostrar todos los registros
+            $query->where(function ($q) {
+                $q->where('ra_social', 'like', '%' . $this->search . '%')
                     ->orWhere('ruc', 'like', '%' . $this->search . '%')
                     ->orWhere('correo', 'like', '%' . $this->search . '%');
-            })
 
+            });
+        } elseif (in_array('Empresa', $roles)) {
+            // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
+            $query->where('user_id', $userId);
+        }
 
-            ->latest('id')
-            ->paginate($this->amount);
+        // Aplicar búsqueda
+        $query->where(function ($q) {
+            $q->where('ra_social', 'like', '%' . $this->search . '%')
+            ->orWhere('ruc', 'like', '%' . $this->search . '%')
+            ->orWhere('correo', 'like', '%' . $this->search . '%');
 
-        return view('admin.pages.empresa-page-crud', compact('empresas'));
+        });
+        $users=User::all();
+                // Obtener los resultados paginados
+          $empresas = $query->latest('id')->paginate($this->amount);
+        return view('admin.pages.empresa-page-crud', compact('empresas','users'));
     }
 
     public function create()
@@ -69,7 +104,7 @@ class SisCrudEmpresa extends Component
         $empresaData = $this->empresa;
 
         if (!isset($empresaData['id'])) {
-            $empresaData['user_id'] = auth()->id();
+            // $empresaData['user_id'] = auth()->id();
             $empresa = Empresa::create($empresaData);
             if ($this->image) {
                 $image = Storage::disk('public')->put('galery', $this->image);
@@ -81,8 +116,8 @@ class SisCrudEmpresa extends Component
         } else {
 
             $empresa = Empresa::find($empresaData['id']);
-            // Si no tiene un ID de usuario, asigna el ID del usuario actual
-            $empresaData['user_id'] = $empresa->user_id ?? auth()->id();
+
+            // $empresaData['user_id'] = $empresa->user_id ?? auth()->id();
             $empresa->update(Arr::except($empresaData, 'image'));
             if ($this->image) {
                 $image = Storage::disk('public')->put('galery', $this->image);

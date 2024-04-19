@@ -35,28 +35,49 @@
 
                             <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
                                 <label>
-                                    Nombre
+                                    <span> Nombre Completo</span>
                                 </label>
-                                <input class="rounded-lg w-full" type="text" name="name" required>
+                                <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
+                                    <span> {{ auth()->user()->name }} </span>
+                                </div>
+                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                value="{{ auth()->user()->name }}">
+
+                                {{-- <input class="rounded-lg w-full" type="text" name="name" required> --}}
                             </div>
                             <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
                                 <label>
-                                    Apellido Paterno
+                                    <span> Apellido Paterno</span>
                                 </label>
-                                <input class="rounded-lg w-full" type="text" name="paterno" required>
+                                <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
+                                    <span> {{ auth()->user()->apellido_p }} </span>
+                                </div>
+                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                value="{{ auth()->user()->apellido_p }}">
+                                {{-- <input class="rounded-lg w-full" type="text" name="paterno" required> --}}
                             </div>
                             <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
                                 <label>
-                                    Apellido Materno
+                                    <span> Apellido Materno</span>
                                 </label>
-                                <input class="rounded-lg w-full" type="text" name="materno" required>
+                                <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
+                                    <span> {{ auth()->user()->apellido_m }} </span>
+                                </div>
+                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                value="{{ auth()->user()->apellido_m }}">
+                                {{-- <input class="rounded-lg w-full" type="text" name="materno" required> --}}
                             </div>
                             <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
                                 <label>
-                                    Direccion
+                                    <span> Direccion </span>
                                 </label>
-                                <input class="rounded-lg w-full" type="text" name="address"
-                                    placeholder="Ejm :  Camiño Sanz, 476, 95º B, 56791, El Naranjo del Mirador" required>
+                                <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
+                                    <span> {{ auth()->user()->direccion }} </span>
+                                </div>
+                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                value="{{ auth()->user()->direccion }}">
+                                {{-- <input class="rounded-lg w-full" type="text" name="address"
+                                    placeholder="Ejm :  Camiño Sanz, 476, 95º B, 56791, El Naranjo del Mirador" required> --}}
                             </div>
                             <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
 
@@ -124,10 +145,10 @@
                                     value="{{ auth()->user()->telefono }}">
                             </div>
                             <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
-                                <label>
-                                    Codigo Postal
-                                </label>
-                                <input class="rounded-lg w-full" type="text" name="postal" placeholder="Ejm : 2100" required>
+
+                                <input class="rounded-lg w-full" type="hidden" name="postal"
+                                value="{{ auth()->user()->direccion }}">
+                                {{-- <input class="rounded-lg w-full" type="text" name="postal" placeholder="Ejm : 2100" required> --}}
                             </div>
 
                             <div class="px-4 py-5">

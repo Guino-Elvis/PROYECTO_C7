@@ -12,7 +12,8 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -48,16 +49,57 @@ class SisCrudOfertaLaboral extends Component
 
     public function render()
     {
-        $this->ofertaLaboral['user_id'] = auth()->user()->id;
-        $ofertaLaborals = OfertaLaboral::where('titulo', 'like', '%' . $this->search . '%')
-            ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
-            ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
-            ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory))
-            ->latest('id')
-            ->paginate($this->amount);
+        // $this->ofertaLaboral['user_id'] = auth()->user()->id;
+        // $ofertaLaborals = OfertaLaboral::where('titulo', 'like', '%' . $this->search . '%')
+        //     ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
+        //     ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
+        //     ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory))
+        //     ->latest('id')
+        //     ->paginate($this->amount);
 
-            $empresas = Empresa::all();
-            $categories = Category::all();
+        //     $empresas = Empresa::all();
+        //     $categories = Category::all();
+
+
+
+            $userId = Auth::id();
+            $user = User::find($userId);
+
+            // Obtener los roles del usuario
+            $roles = $user->roles->pluck('name')->toArray();
+
+            // Inicializar la consulta de aplicaciones
+            $query = OfertaLaboral::query();
+
+              // Aplicar condiciones según los roles del usuario
+              if (in_array('Administrador', $roles)) {
+                // Si el usuario tiene el rol Administrador, mostrar todos los registros
+                $query->where(function ($q) {
+                    $q->where('titulo', 'like', '%' . $this->search . '%')
+                    ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
+                    ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
+                    ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory));
+
+                });
+            } elseif (in_array('Empresa', $roles)) {
+                // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
+                $query->where('user_id', $userId);
+            }
+
+            // Aplicar búsqueda
+            $query->where(function ($q) {
+                $q->where('titulo', 'like', '%' . $this->search . '%')
+                ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
+                    ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
+                    ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory));
+
+            });
+         $empresas = Empresa::all();
+         $categories = Category::all();
+            // $users=User::all();
+                    // Obtener los resultados paginados
+                    $this->ofertaLaboral['user_id'] = auth()->user()->id;
+              $ofertaLaborals = $query->latest('id')->paginate($this->amount);
             return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas','categories'));
     }
 

@@ -92,8 +92,13 @@
                             @endforeach
                             <td class="p-4 text-center">{{ $item->created_at }}</td>
                             <td class="p-4 text-center">{{ $item->updated_at }}</td>
-                            <td class="p-4 acciones w-10 space-y-2">
-                                {{-- @livewire('cliente-edit',['cliente'=>$itemo],key($itemo->id)) --}}
+                            <td class="p-2 w-10 acciones">
+
+                                @php
+                                    $user = Auth::user();
+                                    $userRoleName = $user->roles->first()->name;
+                                @endphp
+                                @if ($userRoleName === 'Administrador')
                                 <x-button-success wire:click="edit({{ $item }})">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </x-button-success>
@@ -107,7 +112,14 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                </form>
+                                @else
+                                    <a href="#"
+                                        class="flex items-center justify-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-medium text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                @endif
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>
