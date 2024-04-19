@@ -37,11 +37,19 @@
                     class="px-4 py-2 flex gap-1 items-center rounded-lg bg-gradient-to-r from-sky-900 to-blue-700 focus:from-sky-900 focus:to-blue-700 active:from-sky-700 active:to-blue-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg">
                     <i class="fa-regular fa-file-lines"></i> pdf
                 </a>
+                @php
+                    $user = Auth::user();
+                    $userRoleName = $user->roles->first()->name;
+                @endphp
+                @if ($userRoleName === 'Administrador')
+                    <button wire:click="create()"
+                        class="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-700 to-yellow-600 focus:from-amber-700 focus:to-yellow-600 active:from-amber-600 active:to-yellow-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg">
+                        <i class="fa-solid fa-plus"></i> Nuevo
+                    </button>
+                @else
+                   <span></span>
+                @endif
 
-                <button wire:click="create()"
-                    class="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-700 to-yellow-600 focus:from-amber-700 focus:to-yellow-600 active:from-amber-600 active:to-yellow-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg">
-                    <i class="fa-solid fa-plus"></i> Nuevo
-                </button>
                 @if ($isOpen)
                     @include('admin.modals.empresas')
                 @endif
@@ -86,9 +94,9 @@
                             <td class="p-4 text-center">{{ $item->telefono }}</td>
                             <td class="p-4 text-center">{{ $item->user->name }}</td>
                             @foreach ($item->user->roles as $role)
-                            <td class="p-4 text-center">
-                             {{ $role->name }}
-                            </td>
+                                <td class="p-4 text-center">
+                                    {{ $role->name }}
+                                </td>
                             @endforeach
                             <td class="p-4 text-center">{{ $item->created_at }}</td>
                             <td class="p-4 text-center">{{ $item->updated_at }}</td>
@@ -99,19 +107,19 @@
                                     $userRoleName = $user->roles->first()->name;
                                 @endphp
                                 @if ($userRoleName === 'Administrador')
-                                <x-button-success wire:click="edit({{ $item }})">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </x-button-success>
-                               <form method="post"
-                                action="{{ url('/empresa/' . $item->id) }}">
-                                @csrf
-                                {{ method_field('DELETE') }}
-                                    <button class="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" type="button"
-                                      data-empresas-id="{{ $item->id }}"
-                                        onclick="confirmDelete(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                               </form>
+                                    <x-button-success wire:click="edit({{ $item }})">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </x-button-success>
+                                    <form method="post" action="{{ url('/empresa/' . $item->id) }}">
+                                        @csrf
+                                        {{ method_field('DELETE') }}
+                                        <button
+                                            class="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                            type="button" data-empresas-id="{{ $item->id }}"
+                                            onclick="confirmDelete(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 @else
                                     <a href="#"
                                         class="flex items-center justify-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-medium text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
@@ -183,6 +191,6 @@
             });
         }
     </script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </div>
