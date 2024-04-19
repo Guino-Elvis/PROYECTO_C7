@@ -52,7 +52,7 @@
                                 <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
                                     <span> {{ auth()->user()->apellido_p }} </span>
                                 </div>
-                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                <input class="rounded-lg w-full" type="hidden" name="paterno"
                                 value="{{ auth()->user()->apellido_p }}">
                                 {{-- <input class="rounded-lg w-full" type="text" name="paterno" required> --}}
                             </div>
@@ -63,7 +63,7 @@
                                 <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
                                     <span> {{ auth()->user()->apellido_m }} </span>
                                 </div>
-                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                <input class="rounded-lg w-full" type="hidden" name="materno"
                                 value="{{ auth()->user()->apellido_m }}">
                                 {{-- <input class="rounded-lg w-full" type="text" name="materno" required> --}}
                             </div>
@@ -74,7 +74,7 @@
                                 <div class="flex justify-between bg-slate-100 rounded-md px-4 py-1">
                                     <span> {{ auth()->user()->direccion }} </span>
                                 </div>
-                                <input class="rounded-lg w-full" type="hidden" name="name"
+                                <input class="rounded-lg w-full" type="hidden" name="address"
                                 value="{{ auth()->user()->direccion }}">
                                 {{-- <input class="rounded-lg w-full" type="text" name="address"
                                     placeholder="Ejm :  Camiño Sanz, 476, 95º B, 56791, El Naranjo del Mirador" required> --}}
