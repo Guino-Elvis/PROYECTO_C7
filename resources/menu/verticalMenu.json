@@ -166,18 +166,7 @@
             "icon": "fa-solid fa-rectangle-list",
             "roles": ["Cliente"],
             "name": "Mis postulaciones"
-        },
-        {
-            "url": "registro-de-compras-pagos-yape",
-            "icon": "fa-solid fa-wallet",
-            "roles": ["Cliente"],
-            "name": "Pagos yape"
-        },
-        {
-            "url": "registro-de-compras-productos-comprados",
-            "icon": "fa-solid fa-cart-flatbed-suitcase",
-            "roles": ["Cliente"],
-            "name": "Productos comprados"
         }
+
     ]
 }
