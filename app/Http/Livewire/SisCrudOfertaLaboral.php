@@ -26,7 +26,7 @@ class SisCrudOfertaLaboral extends Component
 
     public $isOpen = false;
     public $ruteCreate = false;
-    public $ofertaLaboralState,$ofertaLaboralCategory, $ofertaLaboralEmpresa;
+    public $ofertaLaboralState, $ofertaLaboralCategory, $ofertaLaboralEmpresa;
     public  $amount = 5;
     public $search, $ofertaLaboral;
     public $images = [];
@@ -49,58 +49,52 @@ class SisCrudOfertaLaboral extends Component
 
     public function render()
     {
-        // $this->ofertaLaboral['user_id'] = auth()->user()->id;
-        // $ofertaLaborals = OfertaLaboral::where('titulo', 'like', '%' . $this->search . '%')
-        //     ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
-        //     ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
-        //     ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory))
-        //     ->latest('id')
-        //     ->paginate($this->amount);
 
-        //     $empresas = Empresa::all();
-        //     $categories = Category::all();
+        $userId = Auth::id();
+        $user = User::find($userId);
 
+        // Obtener los roles del usuario
+        $roles = $user->roles->pluck('name')->toArray();
 
+        // Inicializar la consulta de aplicaciones
+        $query = OfertaLaboral::query();
 
-            $userId = Auth::id();
-            $user = User::find($userId);
-
-            // Obtener los roles del usuario
-            $roles = $user->roles->pluck('name')->toArray();
-
-            // Inicializar la consulta de aplicaciones
-            $query = OfertaLaboral::query();
-
-              // Aplicar condiciones según los roles del usuario
-              if (in_array('Administrador', $roles)) {
-                // Si el usuario tiene el rol Administrador, mostrar todos los registros
-                $query->where(function ($q) {
-                    $q->where('titulo', 'like', '%' . $this->search . '%')
-                    ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
-                    ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
-                    ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory));
-
-                });
-            } elseif (in_array('Empresa', $roles)) {
-                // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
-                $query->where('user_id', $userId);
-            }
-
-            // Aplicar búsqueda
+        // Aplicar condiciones según los roles del usuario
+        if (in_array('Administrador', $roles)) {
+            // Si el usuario tiene el rol Administrador, mostrar todos los registros
             $query->where(function ($q) {
                 $q->where('titulo', 'like', '%' . $this->search . '%')
-                ->when($this->ofertaLaboralState, fn($query) => $query->where('state', $this->ofertaLaboralState))
-                    ->when($this->ofertaLaboralEmpresa, fn($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
-                    ->when($this->ofertaLaboralCategory, fn($query) => $query->where('category_id', $this->ofertaLaboralCategory));
-
+                    ->when($this->ofertaLaboralState, fn ($query) => $query->where('state', $this->ofertaLaboralState))
+                    ->when($this->ofertaLaboralEmpresa, fn ($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
+                    ->when($this->ofertaLaboralCategory, fn ($query) => $query->where('category_id', $this->ofertaLaboralCategory));
             });
-         $empresas = Empresa::all();
-         $categories = Category::all();
-            // $users=User::all();
-                    // Obtener los resultados paginados
-                    $this->ofertaLaboral['user_id'] = auth()->user()->id;
-              $ofertaLaborals = $query->latest('id')->paginate($this->amount);
-            return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas','categories'));
+        } elseif (in_array('Empresa', $roles)) {
+            // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
+            $query->where('user_id', $userId);
+        }
+
+        // Aplicar búsqueda
+        $query->where(function ($q) {
+            $q->where('titulo', 'like', '%' . $this->search . '%')
+                ->when($this->ofertaLaboralState, fn ($query) => $query->where('state', $this->ofertaLaboralState))
+                ->when($this->ofertaLaboralEmpresa, fn ($query) => $query->where('empresa_id', $this->ofertaLaboralEmpresa))
+                ->when($this->ofertaLaboralCategory, fn ($query) => $query->where('category_id', $this->ofertaLaboralCategory));
+        });
+
+        //    $empresas = Empresa::all();
+        // Obtener las empresas según el tipo de usuario
+        if (in_array('Empresa', $roles)) {
+            $empresas = Empresa::where('user_id', $userId)->get();
+        } else {
+            $empresas = Empresa::all();
+        }
+
+        $categories = Category::all();
+        // $users=User::all();
+        // Obtener los resultados paginados
+        $this->ofertaLaboral['user_id'] = auth()->user()->id;
+        $ofertaLaborals = $query->latest('id')->paginate($this->amount);
+        return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas', 'categories'));
     }
 
     public function create()
@@ -130,16 +124,14 @@ class SisCrudOfertaLaboral extends Component
     }
 
     public function edit($ofertaLaboral)
-{
+    {
 
-    $this->ofertaLaboral = $ofertaLaboral;
-    // $this->ofertaLaboral = array_slice($ofertaLaboral, 0, 7);
+        $this->ofertaLaboral = $ofertaLaboral;
+        // $this->ofertaLaboral = array_slice($ofertaLaboral, 0, 7);
 
-    $this->isOpen = true;
-    $this->ruteCreate = false;
-
-
-}
+        $this->isOpen = true;
+        $this->ruteCreate = false;
+    }
 
     public function destroy(string $id)
     {

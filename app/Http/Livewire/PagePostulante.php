@@ -47,7 +47,7 @@ class PagePostulante extends Component
         $postulante->materno = $request->materno;
         $postulante->phone = $request->phone;
         $postulante->address = $request->address;
-        $postulante->postal = $request->postal;
+        // $postulante->postal = $request->postal;
         $postulante->email = $request->email;
         $postulante->document = $request->document;
         $postulante->tdatos = ($request->get('tdatos') == "on") ? "1" : "0";

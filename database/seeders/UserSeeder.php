@@ -14,15 +14,42 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        // Crear usuario administrador
+        $admin = User::create([
             'name' => 'Yujra Vargas Guino Elvis',
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('12345678'),
         ]);
 
-        $user = User::where('email', 'admin@gmail.com')->first();
-        $listaRoles = Role::where('name', 'Administrador')->first()->id;
-        $user->roles()->sync($listaRoles);
+        $adminRole = Role::where('name', 'Administrador')->first();
+        $admin->assignRole($adminRole);
+
+        // Crear usuario empresa
+        $empresa = User::create([
+            'name' => 'INFOTEL EMPRESA',
+            'email' => 'empresa@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('12345678'),
+        ]);
+
+        $empresaRole = Role::where('name', 'Empresa')->first();
+        $empresa->assignRole($empresaRole);
+
+        // Crear usuario cliente
+        $cliente = User::create([
+            'name' => 'CLIENTE PRUEBA',
+            'email' => 'usuario@gmail.com',
+            'apellido_p' => 'yujra',
+            'apellido_m' => 'vargas',
+            'dni' => '74349846',
+            'direccion' => 'Dirección: Jr. Lampa 594, Cercado de Lima, Lima - Perú',
+            'telefono' => '+51 916882598',
+            'email_verified_at' => now(),
+            'password' => bcrypt('12345678'),
+        ]);
+
+        $clienteRole = Role::where('name', 'Cliente')->first();
+        $cliente->assignRole($clienteRole);
     }
 }

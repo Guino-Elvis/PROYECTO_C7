@@ -144,12 +144,7 @@
                                 <input class="rounded-lg w-full" type="hidden" name="phone"
                                     value="{{ auth()->user()->telefono }}">
                             </div>
-                            <div class="flex flex-col w-full  px-3 mb-6 md:mb-0">
 
-                                <input class="rounded-lg w-full" type="hidden" name="postal"
-                                value="{{ auth()->user()->direccion }}">
-                                {{-- <input class="rounded-lg w-full" type="text" name="postal" placeholder="Ejm : 2100" required> --}}
-                            </div>
 
                             <div class="px-4 py-5">
                                 <label class=" flex flex-row gap-2 text-gray-500 font-bold">
