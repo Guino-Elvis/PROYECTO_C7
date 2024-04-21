@@ -17,6 +17,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+
 class SisCrudEmpresa extends Component
 {
     use WithFileUploads;
@@ -39,18 +40,6 @@ class SisCrudEmpresa extends Component
 
     public function render()
     {
-        // $empresas = Empresa::query()
-        //     ->with('user.roles')
-        //     ->where(function ($query) {
-        //         $query->where('ra_social', 'like', '%' . $this->search . '%')
-        //             ->orWhere('ruc', 'like', '%' . $this->search . '%')
-        //             ->orWhere('correo', 'like', '%' . $this->search . '%');
-        //     })
-
-
-        //     ->latest('id')
-        //     ->paginate($this->amount);
-        // $users=User::all();
 
         $userId = Auth::id();
         $user = User::find($userId);
@@ -61,14 +50,13 @@ class SisCrudEmpresa extends Component
         // Inicializar la consulta de aplicaciones
         $query = Empresa::query();
 
-          // Aplicar condiciones según los roles del usuario
-          if (in_array('Administrador', $roles)) {
+        // Aplicar condiciones según los roles del usuario
+        if (in_array('Administrador', $roles)) {
             // Si el usuario tiene el rol Administrador, mostrar todos los registros
             $query->where(function ($q) {
                 $q->where('ra_social', 'like', '%' . $this->search . '%')
                     ->orWhere('ruc', 'like', '%' . $this->search . '%')
                     ->orWhere('correo', 'like', '%' . $this->search . '%');
-
             });
         } elseif (in_array('Empresa', $roles)) {
             // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
@@ -78,14 +66,14 @@ class SisCrudEmpresa extends Component
         // Aplicar búsqueda
         $query->where(function ($q) {
             $q->where('ra_social', 'like', '%' . $this->search . '%')
-            ->orWhere('ruc', 'like', '%' . $this->search . '%')
-            ->orWhere('correo', 'like', '%' . $this->search . '%');
-
+                ->orWhere('ruc', 'like', '%' . $this->search . '%')
+                ->orWhere('correo', 'like', '%' . $this->search . '%');
         });
-        $users=User::all();
-                // Obtener los resultados paginados
-          $empresas = $query->latest('id')->paginate($this->amount);
-        return view('admin.pages.empresa-page-crud', compact('empresas','users'));
+        $users = User::where('status',0)->paginate();
+        // Obtener los resultados paginados
+        $empresas = $query->latest('id')
+        ->paginate($this->amount);
+        return view('admin.pages.empresa-page-crud', compact('empresas', 'users'));
     }
 
     public function create()
@@ -102,6 +90,11 @@ class SisCrudEmpresa extends Component
 
         $this->validate();
         $empresaData = $this->empresa;
+        // Obtener el usuario seleccionado
+        $selectedUser = User::findOrFail($empresaData['user_id']);
+        // Actualizar el campo status del usuario seleccionado
+        $selectedUser->status = 1;
+        $selectedUser->save();
 
         if (!isset($empresaData['id'])) {
             // $empresaData['user_id'] = auth()->id();
@@ -190,9 +183,9 @@ class SisCrudEmpresa extends Component
         $filePath = storage_path('app/' . $filename);
 
         $file = fopen($filePath, 'w');
-        fputcsv($file, ['ID', 'RAZON SOCIAL', 'RUC', 'DIRECCION', 'TELEFONO','CORREO', 'Creacion', 'Actualizado']);
+        fputcsv($file, ['ID', 'RAZON SOCIAL', 'RUC', 'DIRECCION', 'TELEFONO', 'CORREO', 'Creacion', 'Actualizado']);
         foreach ($data as $item) {
-            fputcsv($file, [$item->id, $item->ra_social, $item->ruc, $item->direccion, $item->telefono,$item->correo, $item->created_at, $item->updated_at]);
+            fputcsv($file, [$item->id, $item->ra_social, $item->ruc, $item->direccion, $item->telefono, $item->correo, $item->created_at, $item->updated_at]);
         }
 
         fclose($file);
@@ -274,5 +267,4 @@ class SisCrudEmpresa extends Component
         // Devolver el archivo como respuesta
         return response()->download($filePath, $filename)->deleteFileAfterSend();
     }
-
 }

@@ -65,6 +65,8 @@
                             <td scope="col" class="px-6 py-3">ID</td>
                             <td scope="col" class="px-6 py-3">Nombre</td>
                             <td scope="col" class="px-6 py-3">Correo</td>
+                            <td scope="col" class="px-6 py-3">Asociado a empresa</td>
+                            <td scope="col" class="px-6 py-3">Empresa</td>
                             <td scope="col" class="px-6 py-3">Creado</td>
                             <td scope="col" class="px-6 py-3">Actualizado</td>
                             <th scope="col" class="px-4 py-3 acciones"></th>
@@ -81,6 +83,33 @@
                                 </td>
                                 <td class="px-4 py-2 text-center">{{ $user->name }}</td>
                                 <td class="px-4 py-2 text-center">{{ $user->email }}</td>
+                                <td class="px-4 py-2 text-center">
+                                    @if ($user->status === ' ' || $user->status === '0')
+                                        <div class="flex justify-center items-center">
+                                            <div class="px-6 py-1 bg-yellow-600 rounded-xl text-white font-bold"> NO
+                                            </div>
+                                        </div>
+                                    @elseif ($user->status === '1')
+                                        <div class="flex justify-center items-center">
+                                            <div class="px-6 py-1 bg-green-600 rounded-xl text-white font-bold"> SI
+
+                                            </div>
+                                        </div>
+                                    @else
+                                        {{ $user->status }}
+                                    @endif
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    @if ($user->empresas->isEmpty())
+                                        -- No hay empresa --
+                                    @else
+                                        <ul>
+                                            @foreach ($user->empresas as $empresa)
+                                                <li>{{ $empresa->ra_social }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-2 text-center">{{ $user->created_at }}</td>
                                 <td class="px-4 py-2 text-center">{{ $user->updated_at }}</td>
                                 <td class="px-4 py-2 acciones w-10 space-y-2">

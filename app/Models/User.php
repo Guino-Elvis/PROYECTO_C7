@@ -101,4 +101,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(OfertaLaboral::class);
     }
+
+    public function empresas()
+
+    {
+        return $this->hasMany(Empresa::class);
+    }
 }

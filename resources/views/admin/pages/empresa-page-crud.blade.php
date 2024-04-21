@@ -64,8 +64,8 @@
                         <td scope="col" class="px-6 py-3">Logo Empresa</td>
                         <td scope="col" class="px-6 py-3">RUC</td>
                         <td scope="col" class="px-6 py-3">Direccion</td>
-                        <td scope="col" class="px-6 py-3">Telefono</td>
                         <td scope="col" class="px-6 py-3">Correo</td>
+                        <td scope="col" class="px-6 py-3">Telefono</td>
                         <td scope="col" class="px-6 py-3">Usuario</td>
                         <td scope="col" class="px-6 py-3">ROL USUARIO</td>
                         <td scope="col" class="px-6 py-3">Creacion</td>
