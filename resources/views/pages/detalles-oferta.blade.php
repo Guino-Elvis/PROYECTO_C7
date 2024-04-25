@@ -36,13 +36,22 @@
             $user = Auth::user();
             $userRoleName = $user ? ($user->roles->isNotEmpty() ? $user->roles->first()->name : null) : null;
         @endphp
+        @if (Auth::check())
+        @php
+            $user = Auth::user();
+            $userRoleName = $user->roles->isNotEmpty() ? $user->roles->first()->name : null;
+        @endphp
+
         @if ($userRoleName === 'Postulante')
             <a href="{{ route('postulante', ['id' => $detalles->id]) }}"
-                class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
-                ahora</a>
+                class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate ahora</a>
         @else
             <a class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Aun no tienes un rol</a>
         @endif
+    @else
+    <a href="{{ route('postulante', ['id' => $detalles->id]) }}" class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
+        ahora</a>
+    @endif
         <a href="" class="rounded-lg py-2 px-4 text-gray-800 bg-gray-300 font-bold"><i
                 class="fa-regular fa-bookmark"></i></a>
 

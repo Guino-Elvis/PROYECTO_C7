@@ -96,6 +96,14 @@
                             <td class="p-4 text-center">{{ $ofertaLaboral->fecha_inicio }}</td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->fecha_fin }}</td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->limite_postulante }}</td>
+                            <td class="p-4 text-center">
+                                @foreach ($ofertaLaboral->aplication as $item)
+                                <td class="p-4 text-center">
+                                    {{$item->numero}}
+                                </td>
+                                @endforeach
+
+                            </td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->empresa->ra_social }}</td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->user->name }}</td>
 
