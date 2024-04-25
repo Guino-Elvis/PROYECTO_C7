@@ -2,7 +2,7 @@
     <h2 class="mt-6 text-xl font-semibold text-gray-900">{{ $detalles->titulo }}</h2>
 
     <div id="divA" class="hidden">
-        <div  class="flex fle-row justify-start items-center pt-2 gap-2">
+        <div class="flex fle-row justify-start items-center pt-2 gap-2">
             <span class="flex justify-start items-center text-sm ">{{ $detalles->empresa->ra_social }}</span>
             <div class="flex justify-center items-center">
                 <span class="border-e h-5  border-gray-400"></span>
@@ -29,8 +29,21 @@
         </div>
     </div>
     <div class="flex flex-row gap-4 py-4">
-        <a href="{{ route('postulante', ['id' => $detalles->id]) }}" class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
-            ahora</a>
+        {{-- <a href="{{ route('postulante', ['id' => $detalles->id]) }}" class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
+            ahora</a> --}}
+
+            @php
+            $user = Auth::user();
+            $userRoleName = $user->roles->isNotEmpty() ? $user->roles->first()->name : null;
+        @endphp
+        @if ($userRoleName === 'Postulante')
+            <a href="{{ route('postulante', ['id' => $detalles->id]) }}"
+                class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Postulate
+                ahora</a>
+        @else
+        <a
+            class="rounded-lg py-2 px-4 text-white bg-blue-600 font-bold">Aun no tienes un rol</a>
+        @endif
         <a href="" class="rounded-lg py-2 px-4 text-gray-800 bg-gray-300 font-bold"><i
                 class="fa-regular fa-bookmark"></i></a>
 
