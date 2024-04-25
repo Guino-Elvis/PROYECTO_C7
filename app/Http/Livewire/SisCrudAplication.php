@@ -49,7 +49,7 @@ class SisCrudAplication extends Component
                     });
             });
         } elseif (in_array('Postulante', $roles)) {
-            // Si el usuario tiene el rol Postulante, mostrar solo los registros del Postulante
+            // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
             $query->where('user_id', $userId);
         }
 
