@@ -40,26 +40,23 @@ class SisCrudEmpresa extends Component
 
     public function render()
     {
-
         $userId = Auth::id();
         $user = User::find($userId);
 
-        // Obtener los roles del usuario
         $roles = $user->roles->pluck('name')->toArray();
 
-        // Inicializar la consulta de aplicaciones
         $query = Empresa::query();
 
-        // Aplicar condiciones según los roles del usuario
+
         if (in_array('Administrador', $roles)) {
-            // Si el usuario tiene el rol Administrador, mostrar todos los registros
+
             $query->where(function ($q) {
                 $q->where('ra_social', 'like', '%' . $this->search . '%')
                     ->orWhere('ruc', 'like', '%' . $this->search . '%')
                     ->orWhere('correo', 'like', '%' . $this->search . '%');
             });
         } elseif (in_array('Empresa', $roles)) {
-            // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
+
             $query->where('user_id', $userId);
         }
 
@@ -69,12 +66,23 @@ class SisCrudEmpresa extends Component
                 ->orWhere('ruc', 'like', '%' . $this->search . '%')
                 ->orWhere('correo', 'like', '%' . $this->search . '%');
         });
-        $users = User::where('status',0)->paginate();
+
         // Obtener los resultados paginados
-        $empresas = $query->latest('id')
-        ->paginate($this->amount);
+        $empresas = $query->latest('id')->paginate($this->amount);
+
+        $users = [];
+
+        if ($this->ruteCreate == true) {
+            $users = User::where('status', 0)->get();
+        }
+
+        if ($this->ruteCreate == false) {
+            $users = User::all();
+        }
+
         return view('admin.pages.empresa-page-crud', compact('empresas', 'users'));
     }
+
 
     public function create()
     {
@@ -87,14 +95,27 @@ class SisCrudEmpresa extends Component
 
     public function store()
     {
-
         $this->validate();
         $empresaData = $this->empresa;
+
         // Obtener el usuario seleccionado
         $selectedUser = User::findOrFail($empresaData['user_id']);
+
+        // Si el usuario seleccionado es diferente del usuario anterior de la empresa
+        if (isset($empresaData['id'])) {
+            $empresa = Empresa::find($empresaData['id']);
+            if ($selectedUser->id !== $empresa->user_id) {
+                // Cambiar el campo status del usuario anterior a 0
+                $previousUser = User::findOrFail($empresa->user_id);
+                $previousUser->status = 0;
+                $previousUser->save();
+            }
+        }
+
         // Actualizar el campo status del usuario seleccionado
         $selectedUser->status = 1;
         $selectedUser->save();
+
 
         if (!isset($empresaData['id'])) {
             // $empresaData['user_id'] = auth()->id();
@@ -107,7 +128,6 @@ class SisCrudEmpresa extends Component
             }
             $this->emit('alert', 'Registro creado satisfactoriamente');
         } else {
-
             $empresa = Empresa::find($empresaData['id']);
 
             // $empresaData['user_id'] = $empresa->user_id ?? auth()->id();
@@ -140,22 +160,28 @@ class SisCrudEmpresa extends Component
         $this->ruteCreate = false;
     }
 
-    public function delete($id)
-    {
-        Empresa::find($id)->delete();
-    }
+
+    // public function delete($id)
+    // {
+    //     Empresa::find($id)->delete();
+    // }
 
     public function destroy(string $id)
     {
         try {
-            $empresas = Empresa::findOrFail($id);
-            $empresas->delete();
+            $empresa = Empresa::findOrFail($id);
+
+            // Cambiar el status de los usuarios de la empresa a 0
+            $empresa->user()->update(['status' => 0]);
+
+            // Eliminar la empresa
+            $empresa->delete();
 
             return redirect()
                 ->back()
-                ->with('success', '¡item eliminado !');
+                ->with('success', '¡Empresa eliminada exitosamente!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'No se pudo eliminar el item de la lista ');
+            return redirect()->back()->with('error', 'No se pudo eliminar la empresa.');
         }
     }
 
