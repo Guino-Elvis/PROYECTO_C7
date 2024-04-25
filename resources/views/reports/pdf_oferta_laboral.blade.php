@@ -24,7 +24,7 @@
     <h1 class="text-center mb-2">REPORTE DE EMPRESAS</h1>
 
     <div class="mb-2">
-        <span class="text-xs mr-2">Total: {{ $total }} clientes</span>
+        <span class="text-xs mr-2">Total: {{ $total }} Postulantes</span>
 
         <span class="text-xs mr-2">Fecha: {{ $date }}</span>
         <span class="text-xs">Hora: {{ $hour }}</span>

@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ]);
 
-        $clienteRole = Role::where('name', 'Cliente')->first();
+        $clienteRole = Role::where('name', 'Postulante')->first();
         $cliente->assignRole($clienteRole);
     }
 }

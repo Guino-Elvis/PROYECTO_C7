@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Category;
 use Livewire\Component;
 use App\Models\Empresa;
 use App\Models\User;
@@ -35,7 +36,8 @@ class SisCrudEmpresa extends Component
         'empresa.direccion' => 'required',
         'empresa.telefono' => 'required',
         'empresa.correo' => 'required',
-        'empresa.user_id' => 'required'
+        'empresa.user_id' => 'required',
+        'empresa.category_id' => 'required',
     ];
 
     public function render()
@@ -79,8 +81,8 @@ class SisCrudEmpresa extends Component
         if ($this->ruteCreate == false) {
             $users = User::all();
         }
-
-        return view('admin.pages.empresa-page-crud', compact('empresas', 'users'));
+        $categories = Category::all();
+        return view('admin.pages.empresa-page-crud', compact('empresas', 'users','categories'));
     }
 
 

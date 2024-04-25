@@ -74,7 +74,22 @@
                             <div class="text-red-500">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        <div class="flex-auto">
+                            <x-label value="Categoria Laboral" class="font-bold" />
+                            <x-select wire:model="empresa.category_id">
+                                <x-slot name="options">
+                                    <option value="" selected>Seleccione...</option>
+                                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $empresa['category_id'] ?? '' == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                    @endforeach
+                                </x-slot>
+                            </x-select>
+                            @error('empresa.category_id')
+                            <div class="text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="flex  justify-center">
                             <div class="w-full px-6">
                                 <x-label value="Imagen" class="font-bold" />

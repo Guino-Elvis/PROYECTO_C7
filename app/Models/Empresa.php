@@ -9,7 +9,7 @@ class Empresa extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ra_social', 'ruc', 'direccion', 'telefono', 'correo', 'user_id'];
+    protected $fillable = ['ra_social', 'ruc', 'direccion', 'telefono', 'correo', 'user_id','category_id',];
 
     public function oferta_laboral()
     {
@@ -20,6 +20,11 @@ class Empresa extends Model
 public function user()
 {
     return $this->belongsTo(User::class);
+}
+
+public function category()
+{
+    return $this->belongsTo(Category::class);
 }
 
 // protected static function boot()

@@ -110,7 +110,7 @@
                                 <div class="text-red-500">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="flex-auto">
+                            {{-- <div class="flex-auto">
                                 <x-label value="Categoria Laboral" class="font-bold" />
                                 <x-select wire:model="ofertaLaboral.category_id">
                                     <x-slot name="options">
@@ -125,7 +125,7 @@
                                 @error('ofertaLaboral.category_id')
                                 <div class="text-red-500">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                         <input hidden wire:model="ofertaLaboral.user" />
                     </div>

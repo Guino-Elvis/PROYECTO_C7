@@ -48,8 +48,8 @@ class SisCrudAplication extends Component
                             ->orWhere('ubicacion', 'like', '%' . $this->search . '%');
                     });
             });
-        } elseif (in_array('Cliente', $roles)) {
-            // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
+        } elseif (in_array('Postulante', $roles)) {
+            // Si el usuario tiene el rol Postulante, mostrar solo los registros del Postulante
             $query->where('user_id', $userId);
         }
 

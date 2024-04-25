@@ -22,8 +22,8 @@ return new class extends Migration
             $table->date('fecha_fin');
             $table->enum('state', [1, 2]); //1:escondido  2:visible
             $table->string('limite_postulante')->nullable();
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            // $table->unsignedBigInteger('category_id');
+            // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');

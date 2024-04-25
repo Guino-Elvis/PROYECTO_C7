@@ -1,5 +1,5 @@
-@section('title', 'Lista de Clientes - BOLSALABORAL')
-@section('header', 'Lista de Clientes')
+@section('title', 'Lista de Postulantes - BOLSALABORAL')
+@section('header', 'Lista de Postulantes')
 @section('section', 'BOLSALABORAL')
 
 <div>

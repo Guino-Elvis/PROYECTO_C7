@@ -43,7 +43,7 @@ class SisCrudOfertaLaboral extends Component
         'ofertaLaboral.limite_postulante' => 'required',
         'ofertaLaboral.state' => 'required',
         'ofertaLaboral.empresa_id' => 'required',
-        'ofertaLaboral.category_id' => 'required',
+        // 'ofertaLaboral.category_id' => 'required',
 
     ];
 
@@ -69,7 +69,7 @@ class SisCrudOfertaLaboral extends Component
                     ->when($this->ofertaLaboralCategory, fn ($query) => $query->where('category_id', $this->ofertaLaboralCategory));
             });
         } elseif (in_array('Empresa', $roles)) {
-            // Si el usuario tiene el rol Cliente, mostrar solo los registros del cliente
+
             $query->where('user_id', $userId);
         }
 
@@ -89,12 +89,12 @@ class SisCrudOfertaLaboral extends Component
             $empresas = Empresa::all();
         }
 
-        $categories = Category::all();
+        // $categories = Category::all();
         // $users=User::all();
         // Obtener los resultados paginados
         $this->ofertaLaboral['user_id'] = auth()->user()->id;
         $ofertaLaborals = $query->latest('id')->paginate($this->amount);
-        return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas', 'categories'));
+        return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas'));
     }
 
     public function create()

@@ -3,12 +3,12 @@
         {
             "name": "Dashboard",
             "icon": "fa-solid fa-chart-simple",
-            "roles": ["Administrador", "Cliente"],
+            "roles": ["Administrador", "Postulante"],
             "submenu": [
                 {
                     "url": "dashboard-general",
                     "name": "General",
-                    "roles": ["Administrador", "Cliente"],
+                    "roles": ["Administrador", "Postulante"],
                     "slug": "dashboard-general"
                 },
                 {
@@ -21,17 +21,17 @@
         },
         {
             "menuHeader": "APPS & PAGES",
-            "roles": ["Administrador", "Cliente"]
+            "roles": ["Administrador", "Postulante"]
         },
         {
             "name": "Configurar cuenta",
             "icon": "fa-solid fa-user-gear",
-            "roles": ["Administrador", "Cliente"],
+            "roles": ["Administrador", "Postulante"],
             "submenu": [
                 {
                     "url": "configurar-cuenta-perfil",
                     "name": "Perfil",
-                    "roles": ["Administrador", "Cliente"],
+                    "roles": ["Administrador", "Postulante"],
                     "slug": "configurar-cuenta-perfil"
                 },
                 {
@@ -77,13 +77,13 @@
         {
             "url": "favoritos",
             "icon": "fa-solid fa-heart",
-            "roles": ["Cliente"],
+            "roles": ["Postulante"],
             "name": "Favoritos"
         },
         {
             "url": "mensajes",
             "icon": "fa-solid fa-comments",
-            "roles": ["Cliente"],
+            "roles": ["Postulante"],
             "name": "Mensajes"
         },
         {
@@ -159,12 +159,12 @@
         },
         {
             "menuHeader": "SHOPPING & PAYMENTS",
-            "roles": ["Cliente"]
+            "roles": ["Postulante"]
         },
         {
             "url": "registro-de-postulaciones",
             "icon": "fa-solid fa-rectangle-list",
-            "roles": ["Cliente"],
+            "roles": ["Postulante"],
             "name": "Mis postulaciones"
         }
 

@@ -30,9 +30,14 @@ class Category extends Model
     }
 
     //Relación 1 a *
-    public function of_lavoral()
+    // public function of_lavoral()
+    // {
+    //     return $this->hasMany(OfertaLaboral::class);
+    // }
+
+    public function empresa()
     {
-        return $this->hasMany(OfertaLaboral::class);
+        return $this->hasMany(Empresa::class);
     }
 
         //Relación 1 a 1 polimorfica
