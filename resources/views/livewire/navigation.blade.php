@@ -152,9 +152,9 @@
                                         <div class="border-t border-gray-100"></div>
 
                                         <!-- Authentication -->
-                                        <form method="POST" action="{{ route('logout') }}" x-data>
+                                        <form method="POST" action="{{ route('logout_user') }}" x-data>
                                             @csrf
-                                            <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                            <x-dropdown-link href="{{ route('logout_user') }}" @click.prevent="$root.submit();">
                                                 <i class="fa-solid fa-power-off mr-2"></i>
                                                 {{ __('Cerrar sesión') }}
                                             </x-dropdown-link>
@@ -164,7 +164,7 @@
                             </div>
                         </div>
                     @else
-                        <a href="/login" class="px-2 py-1 flex items-center gap-1  active:bg-zinc-300 group">
+                        <a href="/login-bolsa" class="px-2 py-1 flex items-center gap-1  active:bg-zinc-300 group">
                             <div class="text-sm flex-none w-max">
                                 <div class="flex flex-col">
 

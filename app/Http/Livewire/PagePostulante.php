@@ -20,18 +20,18 @@ class PagePostulante extends Component
     {
         $this->detalles = OfertaLaboral::findOrFail($id);
 
-        if (!Auth::check()) {
-            Toastr::error('Para continuar, necesitas Iniciar Sesión', 'Error');
-            return redirect('/login')->with('message', '¡Para continuar, necesitas Iniciar Sesión!');
-        }
+        // if (!Auth::check()) {
+        //     Toastr::error('Para continuar, necesitas Iniciar Sesión', 'Error');
+        //     return redirect('/login-bolsa')->with('message', '¡Para continuar, necesitas Iniciar Sesión!');
+        // }
 
-        if (Auth::user()->email_verified_at == null) {
-            Toastr::error('¡Para continuar, necesitas verificar tu dirección de correo electrónico!', 'Error');
-            return redirect('/verify-email')->with('message', '¡Para continuar, necesitas verificar tu dirección de correo electrónico!');
-        }
+        // if (Auth::user()->email_verified_at == null) {
+        //     Toastr::error('¡Para continuar, necesitas verificar tu dirección de correo electrónico!', 'Error');
+        //     return redirect('/verify-email')->with('message', '¡Para continuar, necesitas verificar tu dirección de correo electrónico!');
+        // }
 
-        session(['postulacionIniciado' => true]);
-        $this->emit('redirectToPostulacion', $this->detalles->id);
+        // session(['postulacionIniciado' => true]);
+        // $this->emit('redirectToPostulacion', $this->detalles->id);
     }
 
     public function render()

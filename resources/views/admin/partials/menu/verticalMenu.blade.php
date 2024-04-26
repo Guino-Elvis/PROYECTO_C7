@@ -117,9 +117,9 @@
         </div>
         <div class="p-3 sticky z-10 bottom-0 h-16 bg-[#4D73DF] border-t">
             <ul class="">
-                <form method="POST" action="{{ route('logout') }}" x-data>
+                <form method="POST" action="{{ route('logout_user') }}" x-data>
                     @csrf
-                    <x-sidebar-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                    <x-sidebar-link href="{{ route('logout_user') }}" @click.prevent="$root.submit();">
                         <x-slot name="logo">
                             <i class="fa-solid fa-power-off"></i>
                         </x-slot>

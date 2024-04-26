@@ -34,4 +34,8 @@ class PageBolsaLaboral extends Component
         // Cargar los detalles de la oferta según el ID recibido
         $this->primerDetalle = OfertaLaboral::findOrFail($id);
     }
+
+
+
+
 }

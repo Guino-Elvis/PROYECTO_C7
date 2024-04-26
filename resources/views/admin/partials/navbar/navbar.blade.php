@@ -150,10 +150,10 @@
                             <div class="border-t border-gray-100"></div>
 
                             <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}" x-data>
+                            <form method="POST" action="{{ route('logout_user') }}" x-data>
                                 @csrf
 
-                                <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                <x-dropdown-link href="{{ route('logout_user') }}" @click.prevent="$root.submit();">
                                     <i class="fa-solid fa-power-off mr-2"></i>
                                     {{ __('Cerrar sesión') }}
                                 </x-dropdown-link>

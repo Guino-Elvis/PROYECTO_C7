@@ -28,7 +28,7 @@
                         <div class="cta-text pl-4">
                             <h4 class="text-white md:text-lg text-sm font-semibold mb-1">
                                 {{ trans('footerl.Correo electrónico') }}</h4>
-                            <a href="mailto:ventas@infotelperu.com" class="text-gray-600">ventas@infotelperu.com</a>
+                            <a href="mailto:ventas@BOLSALABORAL.com" class="text-gray-600">ventas@BOLSALABORAL.com</a>
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
             <div class="text-center">
                 <div class="copyright-text">
                     <p class="text-gray-600 text-sm mb-0">Copyright &copy; 2024,
-                        {{ trans('footerl.Todos los derechos reservados INFOTELPERU') }}</p>
+                        {{ trans('footerl.Todos los derechos reservados BOLSALABORAL') }}</p>
                 </div>
             </div>
             <div class="flex ">

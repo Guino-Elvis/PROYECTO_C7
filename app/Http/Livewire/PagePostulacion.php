@@ -22,7 +22,7 @@ class PagePostulacion extends Component
         if (!Auth::check()) {
             //$this->mostrarModal('¡Producto agregado al carrito exitosamente!');
             $this->emit('mostrarModal', '¡Para continuar, necesitas Iniciar Sesión!');
-            return redirect('/login');
+            return redirect('/login-bolsa');
         }
         // Verificar si el correo electrónico del usuario está verificado
         if (Auth::user()->email_verified_at == null) {

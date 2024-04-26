@@ -67,20 +67,20 @@ class User extends Authenticatable
     ];
 
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($user) {
-            // Verificar el email automáticamente al crear un nuevo usuario
-            $user->email_verified_at = now();
-        });
+    //     static::creating(function ($user) {
+    //         // Verificar el email automáticamente al crear un nuevo usuario
+    //         $user->email_verified_at = now();
+    //     });
 
-        // static::created(function ($user) {
-        //     // Asignar el rol de "Cliente" al usuario creado
-        //     $user->assignRole('Cliente');
-        // });
-    }
+    //     // static::created(function ($user) {
+    //     //     // Asignar el rol de "Cliente" al usuario creado
+    //     //     $user->assignRole('Cliente');
+    //     // });
+    // }
 
 
     //Relación de 1 a *

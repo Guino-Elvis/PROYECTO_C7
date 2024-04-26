@@ -2,26 +2,120 @@
 
     <div class="contenedor">
         <div class="gradiante">
-            <div class="cont-area-register-top rounded-b-lg">
-
-                <div class="p-3 text-center flex justify-between">
-                    <div class="flex justify-between">
-                        <a href="/"
-                            class="inline-flex items-center px-3 py-1 text-white rounded-lg font-normal text-xs  uppercase hover:text-gray-900 focus:outline-none active:text-white active:bg-gray-800 disabled:opacity-25 transition">
-                            <i class="fa-solid fa-arrow-left mr-2"></i>
-                            {{ trans('REGRESAR') }}
-                        </a>
-                        <div></div>
-                    </div>
-                </div>
-
-            </div>
             <div class=" flex justify-center items-center">
                 <div class="container px-auto pt-20 ">
 
                     <div class="login-wrap">
                         <div class="login-html px-10 py-10">
+                            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label
+                                for="tab-1" class="tab">Sign In</label>
+                            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2"
+                                class="tab">Sign
+                                Up</label>
                             <div class="login-form">
+
+                                <div class="sign-in-htm">
+                                    <x-validation-errors class="mb-4 bg-white rounded-xl px-5 py-5" />
+
+                                    @if (session('status'))
+                                        <div class="mb-4 font-medium text-sm text-green-600">
+                                            {{ session('status') }}
+                                        </div>
+                                    @endif
+                                    <form method="POST" action="{{ route('iniciar_user') }}" autocomplete="off">
+                                        @csrf
+
+                                        <div class="group">
+                                            <label class="label" for="email" value="{{ __('Email') }}">Correo
+                                                electrónico</label>
+                                            <input class="input" type="email" name="email" id="email"
+                                                placeholder="name@company.com" required>
+
+                                        </div>
+                                        <div class="group">
+                                        <div x-data="{ show: true }">
+                                            <label for="password" class="label">Contraseña</label>
+                                            <div class="relative">
+
+                                                <input id="password" type="password" name="password" required
+                                                    autocomplete="current-password" placeholder="••••••••"
+                                                    :type="show ? 'password' : 'text'" class="input">
+                                                <div
+                                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 cursor-pointer">
+                                                    <div class="h-5 text-gray-700 pt-0.5" @click="show = !show"
+                                                        :class="{ 'hidden': !show, 'block': show }">
+                                                        <i class="fa-solid fa-eye fa-lg"></i>
+                                                    </div>
+                                                    <div class="h-5 text-gray-700 pt-0.5" @click="show = !show"
+                                                        :class="{ 'block': !show, 'hidden': show }">
+                                                        <i class="fa-solid fa-eye-slash fa-lg"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="block mt-4 mb-4">
+                                            <label for="remember_me" class="flex items-center">
+                                                <x-checkbox id="remember_me" name="remember" />
+                                                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                                            </label>
+                                        </div>
+                                        <div class="group">
+                                            <input type="submit" class="button" style="cursor: pointer;"
+                                                value="Iniciar sesion">
+                                        </div>
+                                        <div class="hr"></div>
+
+                                        @if (Route::has('password.request'))
+                                            <div class="foot-lnk">
+                                                <a class="underline text-sm text-gray-200 hover:text-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    href="{{ route('password.request') }}">
+                                                    {{ __('Forgot your password?') }}
+                                                </a>
+                                            </div>
+                                        @endif
+
+
+                                    </form>
+                                    <div class="footer_google">
+                                        <div class="fg_content_01">
+                                            <div class="login_line"></div>
+                                            <h1
+                                                class="text-xs sm:text-sm text-center font-base text-indigo-500 hover:text-indigo-600 py-5">
+                                                {{ trans('O Inicia sesión con') }}
+                                            </h1>
+                                            <div class="login_line"></div>
+                                        </div>
+
+                                        @php
+                                            $viewFromLR = session('fromLR');
+                                            //dd($viewFromLR);
+                                            // Verificar si existe una sesión llamada 'pago_session'
+                                            if ($viewFromLR === 'login-register') {
+                                                session(['fromLRV' => 'login-register']);
+                                                session(['from' => 'login-bolsa']);
+                                                //dd(session('fromLRV'));
+                                            } else {
+                                                session(['from' => 'login-bolsa']);
+                                            }
+                                        @endphp
+                                        <div class="fg_content_02">
+                                            <a href="{{ route('login-google') }}"
+                                                class="w-full text-sm bg-gradient-to-r from-indigo-700 to-blue-600
+                                                    focus:ring-4 focus:outline-none focus:ring-indigo-300
+                                                    hover:from-indigo-800 hover:to-blue-700
+                                                    inline-block px-4 py-2 rounded-md text-white">
+                                                <div class="flex justify-center items-center gap-2">
+                                                    <img class="w-[1rem] h-[1rem]"
+                                                        src="{{ asset('img/logo_google.png') }}"
+                                                        class="fondo-login">
+                                                    Google
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="sign-up-htm flex w-auto h-full">
                                     <x-validation-errors class="mb-4 bg-white rounded-xl px-5 py-5" />
                                     <form method="POST" action="{{ route('register_user') }}">
@@ -191,12 +285,42 @@
         background: rgba(40, 57, 101, 0.801);
     }
 
+    /* .contenedor {
+        color: #6a6f8c;
+        font: 600 16px/18px 'Open Sans', sans-serif;
+        width: 100%;
+        margin: auto;
+        background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
+
+    } */
+
+    *,
+    :after,
+    :before {
+        box-sizing: border-box
+    }
+
+    .clearfix:after,
+    .clearfix:before {
+        content: '';
+        display: table
+    }
+
+    .clearfix:after {
+        clear: both;
+        display: block
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none
+    }
+
     .login-wrap {
         width: 100%;
         margin: auto;
-        max-width: 25rem;
-        min-height: 47rem;
-        border-radius: 0.5rem;
+        max-width: 27rem;
+        min-height: 49rem;
         position: relative;
         background: url(https://thumbs.dreamstime.com/z/figuras-geom%C3%A9tricas-abstractas-en-fondo-azul-marino-tex-incons%C3%BAtil-56933301.jpg) no-repeat center;
         box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
@@ -207,12 +331,19 @@
         height: 100%;
         position: absolute;
         background: rgba(40, 57, 101, .9);
-        border-radius: 0.5rem;
-
     }
 
-
-
+    .login-html .sign-in-htm,
+    .login-html .sign-up-htm {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        transform: rotateY(180deg);
+        backface-visibility: hidden;
+        transition: all .4s linear;
+    }
 
     .login-html .sign-in,
     .login-html .sign-up,
@@ -281,6 +412,62 @@
 
     .login-form .group .button {
         background: #1161ee;
+    }
+
+    .login-form .group label .icon {
+        width: 15px;
+        height: 15px;
+        border-radius: 2px;
+        position: relative;
+        display: inline-block;
+        background: rgba(255, 255, 255, .1);
+    }
+
+    .login-form .group label .icon:before,
+    .login-form .group label .icon:after {
+        content: '';
+        width: 10px;
+        height: 2px;
+        background: #fff;
+        position: absolute;
+        transition: all .2s ease-in-out 0s;
+    }
+
+    .login-form .group label .icon:before {
+        left: 3px;
+        width: 5px;
+        bottom: 6px;
+        transform: scale(0) rotate(0);
+    }
+
+    .login-form .group label .icon:after {
+        top: 6px;
+        right: 0;
+        transform: scale(0) rotate(0);
+    }
+
+    .login-form .group .check:checked+label {
+        color: #fff;
+    }
+
+    .login-form .group .check:checked+label .icon {
+        background: #1161ee;
+    }
+
+    .login-form .group .check:checked+label .icon:before {
+        transform: scale(1) rotate(45deg);
+    }
+
+    .login-form .group .check:checked+label .icon:after {
+        transform: scale(1) rotate(-45deg);
+    }
+
+    .login-html .sign-in:checked+.tab+.sign-up+.tab+.login-form .sign-in-htm {
+        transform: rotate(0);
+    }
+
+    .login-html .sign-up:checked+.tab+.login-form .sign-up-htm {
+        transform: rotate(0);
     }
 
     .hr {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Livewire\AccountSettingProfile;
 use App\Http\Livewire\AccountSettingYape;
 //use App\Http\Livewire\SisCrudEmpresa;
@@ -17,9 +18,13 @@ use App\Http\Livewire\SisCrudPostulante;
 use App\Http\Livewire\TableCategories;
 use App\Http\Livewire\TableProducts;
 use App\Http\Livewire\TableUsers;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-
+use Yoeunes\Toastr\Facades\Toastr as FacadesToastr;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,11 +36,143 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 |
 */
 
+// Route::get('/login-google', function () {
+//     return Socialite::driver('google')->redirect();
+// });
+Route::get('/login-google', function () {
+    return Socialite::driver('google')->redirect();
+})->name('login-google');
+
+Route::get('/google-callback', function () {
+    $user = Socialite::driver('google')->user();
+    //dd($user);
+    $userArray = $user->user;
+
+    // Accede a un elemento específico dentro del array
+    $names = ucwords(strtolower($userArray['given_name']));
+    $apellidos = $userArray['family_name'];
+    $nameParts = explode(' ', $apellidos);
+    $apellidoM = ucwords(strtolower(end($nameParts)));
+    array_pop($nameParts);
+    $apellidoP = ucwords(strtolower(end($nameParts)));
+
+    $email = $user->email;
+    $userExits = User::where('email', $email)->first();
+    $viewFrom = session('from');
+    $viewFromLR = session('fromLRV');
+    if ($viewFrom === 'login-bolsa' || $userExits) {
+        // Estás en la vista de login
+        if ($userExits) {
+            if ($userExits->external_auth == 'google') {
+                // Verifica si el usuario ya tiene un rol asociado, si no, crea uno
+                if (!$userExits->roles->count()) {
+                    $role = Role::where('name', 'Postulante')->first();
+                    if ($role) {
+                        $userExits->roles()->attach($role);
+                    } else {
+                        // Si el rol no existe, maneja este caso de acuerdo a tus necesidades
+                        // Puede ser lanzar una excepción, registrar un mensaje de error, etc.
+                    }
+                }
+                Auth::login($userExits);
+                FacadesToastr::success(
+                    'El Postulante inició sesión exitosamente
+                ',
+                    'Acceso exitoso',
+                );
+
+                if ($viewFromLR === 'login-register') {
+                    session()->forget('fromLR');
+                    return redirect()->route('inicio');
+                } else {
+                    session()->forget('fromLR');
+                    return redirect('/');
+                }
+            } else {
+                $userExits->update([
+                    'avatar' => $user->avatar,
+                    'external_id' => $user->id,
+                    'external_auth' => 'google',
+                ]);
+
+                if (!$userExits->roles->count()) {
+                    $role = Role::where('name', 'Postulante')->first();
+                    if ($role) {
+                        $userExits->roles()->attach($role);
+                    } else {
+                        // Si el rol no existe, maneja este caso de acuerdo a tus necesidades
+                        // Puede ser lanzar una excepción, registrar un mensaje de error, etc.
+                    }
+                }
+                Auth::login($userExits);
+                FacadesToastr::success(
+                    'El Postulante inició sesión exitosamente
+                ',
+                    'Acceso exitoso',
+                );
+                $viewFromLR = session('fromLR');
+                if ($viewFromLR === 'login-register') {
+                    session()->forget('fromLR');
+                    return redirect()->route('inicio');
+                } else {
+                    session()->forget('fromLR');
+                    return redirect('/');
+                }
+            }
+        } else {
+            // Mostrar una notificación usando toastr
+            FacadesToastr::error('No existe la cuenta en BOLSALABORAL, tiene que REGISTRARSE.');
+            return redirect('/registrar-nuevo-usuario');
+        }
+    } elseif ($viewFrom === 'registrar-nuevo-usuario') {
+        // Estás en la vista de registro
+        if (!$userExits) {
+            $userNew = User::create([
+                'name' => $names,
+                'names' => $names,
+                'email' => $user->email,
+                'email_verified_at' => now(),
+                'password' => bcrypt('12345678'),
+                'apellido_m' => $apellidoM,
+                'apellido_p' => $apellidoP,
+                'avatar' => $user->avatar,
+                'external_id' => $user->id,
+                'external_auth' => 'google',
+            ]);
+            if (!$userNew->roles->count()) {
+                $role = Role::where('name', 'Postulante')->first();
+                if ($role) {
+                    $userNew->roles()->attach($role);
+                } else {
+                    // Si el rol no existe, maneja este caso de acuerdo a tus necesidades
+                    // Puede ser lanzar una excepción, registrar un mensaje de error, etc.
+                }
+            }
+
+            Auth::login($userNew);
+            FacadesToastr::success(
+                'El Postulante inició sesión exitosamente
+            ',
+                'Acceso exitoso',
+            );
+            $viewFromLR = session('fromLR');
+            if ($viewFromLR === 'login-register') {
+                session()->forget('fromLR');
+                return redirect()->route('inicio');
+            } else {
+                session()->forget('fromLR');
+                return redirect('/');
+            }
+        }
+    }
+});
+
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
-    ], function(){
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    ],
+    function () {
 
         // Route::get('/', function () {
         //     return view('welcome');
@@ -43,6 +180,18 @@ Route::group(
 
 
         Route::get('/', PageBolsaLaboral::class)->name('inicio');
+
+        // RUTAS DE LOGIN/REGISTER/LOGOUT/UPDATE/DESTROY PERSONALIZADOS
+        Route::controller(AuthController::class)->group(function () {
+            Route::post('/logout_user', 'logout_user')->name('logout_user');
+            Route::post('/register_user', 'create_user')->name('register_user');
+            Route::post('/iniciar_user', 'login_user')->name('iniciar_user');
+        });
+
+        // RUTAS DE VERIFICACIÓN PERSONALIZADOS
+        Route::get('/email/verify-notice', 'App\Http\Controllers\VerificationController@notice')->name('verificacion.notice');
+        Route::get('/email/verify/{id}', 'App\Http\Controllers\VerificationController@verify')->name('verificacion.verify');
+        Route::get('/email/resend', 'App\Http\Controllers\VerificationController@resend')->name('verificacion.resend');
 
         Route::middleware([
             'auth:sanctum',
@@ -64,10 +213,10 @@ Route::group(
             Route::get('/sistema/pagina/tabla-categorias', TableCategories::class)->name('tabla-categorias');
             Route::get('/sistema/pagina/tabla-productos', TableProducts::class)->name('tabla-productos');
             Route::get('/sistema/pagina/tabla-empresas', SisCrudEmpresa::class)->name('tabla-empresas');
-            Route::Resource('empresa',SisCrudEmpresa::class);
+            Route::Resource('empresa', SisCrudEmpresa::class);
 
             Route::get('/sistema/pagina/tabla-ofertas-laborales', SisCrudOfertaLaboral::class)->name('tabla-ofertas-laborales');
-            Route::Resource('oferta_laboral',SisCrudOfertaLaboral::class);
+            Route::Resource('oferta_laboral', SisCrudOfertaLaboral::class);
 
             Route::get('/sistema/pagina/tabla-banners', AccountSettingProfile::class)->name('tabla-banners');
 
@@ -95,15 +244,13 @@ Route::group(
 
             Route::get('/postulante/{id}', PagePostulante::class)->name('postulante');
             Route::post('/grabar_postulacion_postulante/{id}', [PagePostulante::class, 'save_postulante'])->name('grabar.postulante');
-
-
-
         });
-    });
-    Route::get('/resultado-de-postulacion/{id}', PageResulPostulacion::class)->name('resultado.postulacion');
-    //PAGES
-    // Route::get('/postulacion/{id}',PagePostulacion::class)->name('detalle.postulacion');
-    Route::get('/ruta-al-endpoint', [PageBolsaLaboral::class, 'obtenerDetallesOferta']);
+    }
+);
+Route::get('/resultado-de-postulacion/{id}', PageResulPostulacion::class)->name('resultado.postulacion');
+//PAGES
+// Route::get('/postulacion/{id}',PagePostulacion::class)->name('detalle.postulacion');
+Route::get('/ruta-al-endpoint', [PageBolsaLaboral::class, 'obtenerDetallesOferta']);
 
 require_once __DIR__ . '/jetstream.php';
 require_once __DIR__ . '/fortify.php';

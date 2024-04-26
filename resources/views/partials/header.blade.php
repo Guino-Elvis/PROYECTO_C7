@@ -13,7 +13,7 @@
             <li class="flex items-center">
                 <i class="fa-solid fa-envelope mr-1"></i>
                 <a class="hover:text-indigo-500 font-normal"
-                    href="mailto:ventas@infotelperu.com">ventas@infotelperu.com</a>
+                    href="mailto:ventas@BOLSALABORAL.com">ventas@BOLSALABORAL.com</a>
             </li>
         </ul>
         <div class="flex gap-3 justify-center items-center mt-1 sm:mt-0">

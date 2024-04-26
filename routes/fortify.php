@@ -26,23 +26,23 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Authentication...
     if ($enableViews) {
-        Route::get(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'create'])
+        Route::get(RoutePath::for('login', '/login-bolsa'), [AuthenticatedSessionController::class, 'create'])
             ->middleware(['guest:'.config('fortify.guard')])
-            ->name('login');
+            ->name('login-bolsa');
     }
 
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
-    Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
+    Route::post(RoutePath::for('login', '/login-bolsa'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
             'guest:'.config('fortify.guard'),
             $limiter ? 'throttle:'.$limiter : null,
         ]));
 
-    Route::post(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
+        Route::post(RoutePath::for('logout', '/cerrar-sesion'), [AuthenticatedSessionController::class, 'destroy'])
+        ->name('cerrar-sesion');
 
     // Password Reset...
     if (Features::enabled(Features::resetPasswords())) {
@@ -68,12 +68,12 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     // Registration...
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
-            Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])
+            Route::get(RoutePath::for('register', '/registrar-nuevo-usuario'), [RegisteredUserController::class, 'create'])
                 ->middleware(['guest:'.config('fortify.guard')])
-                ->name('register');
+                ->name('registrar-nuevo-usuario');
         }
 
-        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
+        Route::post(RoutePath::for('register', '/registrar-nuevo-usuario'), [RegisteredUserController::class, 'store'])
             ->middleware(['guest:'.config('fortify.guard')]);
     }
 

@@ -18,7 +18,7 @@ class PageResulPostulacion extends Component
 
         if (!Auth::check()) {
             $this->emit('mostrarModal', '¡Para continuar, necesitas Iniciar Sesión!');
-            return redirect('/login');
+            return redirect('/login-bolsa');
         }
         if (Auth::user()->email_verified_at == null) {
             $this->emit('mostrarModalGmail', '¡Para continuar, necesitas verificar tu dirección de correo electrónico!');
