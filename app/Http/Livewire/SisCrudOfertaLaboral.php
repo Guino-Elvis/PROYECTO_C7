@@ -18,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Illuminate\Http\Request;
 
 class SisCrudOfertaLaboral extends Component
 {
@@ -59,6 +60,7 @@ class SisCrudOfertaLaboral extends Component
         // Inicializar la consulta de aplicaciones
         $query = OfertaLaboral::query();
 
+        $query = OfertaLaboral::with('aplication'); // Cargar la relación 'aplication'
         // Aplicar condiciones según los roles del usuario
         if (in_array('Administrador', $roles)) {
             // Si el usuario tiene el rol Administrador, mostrar todos los registros
@@ -89,13 +91,28 @@ class SisCrudOfertaLaboral extends Component
             $empresas = Empresa::all();
         }
 
-        // $categories = Category::all();
-        // $users=User::all();
-        // Obtener los resultados paginados
         $this->ofertaLaboral['user_id'] = auth()->user()->id;
         $ofertaLaborals = $query->latest('id')->paginate($this->amount);
+
+
+        // Ahora puedes acceder a las aplicaciones de cada oferta laboral
+        foreach ($ofertaLaborals as $ofertaLaboral) {
+            $aplicaciones = $ofertaLaboral->aplication; // Acceder a las aplicaciones de cada oferta laboral
+            // Hacer algo con las aplicaciones, por ejemplo, contarlas
+            $cantidadAplicaciones = $aplicaciones->count();
+        }
         return view('admin.pages.table-oferta-laboral', compact('ofertaLaborals', 'empresas'));
     }
+
+
+public function show($id)
+{
+    $ofertaLaboraldetail = OfertaLaboral::findOrFail($id);
+
+    $details = $ofertaLaboraldetail->aplication()->paginate(6);
+    $cantidadAplicaciones = $details->count();
+    return view('admin.pages.show-oferta-laboral', compact('ofertaLaboraldetail', 'details'));
+}
 
     public function create()
     {

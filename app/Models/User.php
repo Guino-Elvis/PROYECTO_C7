@@ -25,15 +25,23 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
+    public $timestamps = false;
+    protected $primaryKey = 'id';
     protected $fillable = [
         'name',
+        'names',
         'email',
+        'email_verified_at',
         'apellido_p',
         'apellido_m',
         'dni',
         'direccion',
         'telefono',
         'password',
+        'avatar',
+        'external_id',
+        'external_auth',
     ];
 
     /**

@@ -18,16 +18,15 @@ class PagePostulacion extends Component
     {
         $this->detalles = OfertaLaboral::findOrFail($id);
 
-        // Verificar si el usuario está autenticado
         if (!Auth::check()) {
-            //$this->mostrarModal('¡Producto agregado al carrito exitosamente!');
+            $this->mostrarModal('¡Producto agregado al carrito exitosamente!');
             $this->emit('mostrarModal', '¡Para continuar, necesitas Iniciar Sesión!');
             return redirect('/login-bolsa');
         }
-        // Verificar si el correo electrónico del usuario está verificado
+
         if (Auth::user()->email_verified_at == null) {
             $this->emit('mostrarModalGmail', '¡Para continuar, necesitas verificar tu dirección de correo electrónico!');
-            return redirect('/verify-email');
+            return view('auth.verify-email');
         }
 
         // Establecer la variable en la sesión

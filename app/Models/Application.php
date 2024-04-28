@@ -9,6 +9,16 @@ class Application extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'status',
+        'numero',
+        'fecha_postulacion',
+        'documentos',
+        'postulante_id',
+        'user_id',
+        'oferta_laboral_id'
+    ];
+
     public function oferta_laboral()
     {
         return $this->belongsTo(OfertaLaboral::class);

@@ -41,6 +41,7 @@
 
                         <td scope="col" class="px-6 py-3">Creado</td>
                         <td scope="col" class="px-6 py-3">Actualizado</td>
+                        <td scope="col" class="px-6 py-3">Acciones</td>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300 bg-white">
@@ -65,6 +66,12 @@
                             <td class="p-4 text-center">{{ $item->oferta_laboral->titulo }}</td>
                             <td class="p-4 text-center">{{ $item->created_at }}</td>
                             <td class="p-4 text-center">{{ $item->updated_at }}</td>
+                            <td class="p-4 text-center">
+                                <a href="{{ route('registro-de-postulaciones.show', ['id' => $item->id]) }}"
+                                    class="flex items-center justify-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-medium text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
+                                    <i class="fa-regular fa-eye"></i>
+                                </a>
+                            </td>
 
                         </tr>
                     @endforeach

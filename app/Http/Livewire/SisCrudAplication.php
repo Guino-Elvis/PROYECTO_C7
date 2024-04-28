@@ -8,6 +8,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+
 class SisCrudAplication extends Component
 {
     use WithFileUploads;
@@ -77,5 +78,6 @@ class SisCrudAplication extends Component
 
         return view('admin.pages.sis-crud-aplication', compact('aplicaciones'));
     }
-}
 
+
+}

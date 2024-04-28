@@ -15,6 +15,7 @@ use App\Http\Livewire\SisCrudAplication;
 use App\Http\Livewire\SisCrudEmpresa;
 use App\Http\Livewire\SisCrudOfertaLaboral;
 use App\Http\Livewire\SisCrudPostulante;
+use App\Http\Livewire\SisValidacionAplication;
 use App\Http\Livewire\TableCategories;
 use App\Http\Livewire\TableProducts;
 use App\Http\Livewire\TableUsers;
@@ -216,6 +217,7 @@ Route::group(
             Route::Resource('empresa', SisCrudEmpresa::class);
 
             Route::get('/sistema/pagina/tabla-ofertas-laborales', SisCrudOfertaLaboral::class)->name('tabla-ofertas-laborales');
+            Route::get('/sistema/pagina/oferta-laboral/show/{id}', [SisCrudOfertaLaboral::class, 'show'])->name('oferta-laboral.show');
             Route::Resource('oferta_laboral', SisCrudOfertaLaboral::class);
 
             Route::get('/sistema/pagina/tabla-banners', AccountSettingProfile::class)->name('tabla-banners');
@@ -223,6 +225,9 @@ Route::group(
             Route::get('/sistema/pagina/tabla-venta-clientes', SisCrudPostulante::class)->name('tabla-venta-clientes');
             Route::get('/sistema/pagina/tabla-venta-entregas', AccountSettingProfile::class)->name('tabla-venta-entregas');
             Route::get('/sistema/pagina/registro-de-postulaciones-listado-de-postulaciones', SisCrudAplication::class)->name('registro-de-postulaciones');
+            Route::get('/sistema/pagina/registro-de-postulaciones/show/{id}', [SisValidacionAplication::class, 'render'])->name('registro-de-postulaciones.show');
+            Route::get('aplication/editar/{aplicationId}','App\Http\Livewire\SisValidacionAplication@editar_aplication')->name('aplication.editar');
+            Route::put('aplication/editar/{aplicationId}', 'App\Http\Livewire\SisValidacionAplication@guardar_edicion_aplication')->name('aplication.guardar_edicion');
             Route::get('/sistema/pagina/registro-de-ventas-pagos-yape', AccountSettingProfile::class)->name('registro-de-ventas-pagos-yape');
             Route::get('/sistema/pagina/registro-de-ventas-productos-vendidos', AccountSettingProfile::class)->name('registro-de-ventas-productos-vendidos');
 

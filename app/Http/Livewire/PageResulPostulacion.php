@@ -22,7 +22,7 @@ class PageResulPostulacion extends Component
         }
         if (Auth::user()->email_verified_at == null) {
             $this->emit('mostrarModalGmail', '¡Para continuar, necesitas verificar tu dirección de correo electrónico!');
-            return redirect('/verify-email');
+            return view('auth.verify-email');
         }
 
         $this->emit('redirectToAplications',$this->aplications->id);

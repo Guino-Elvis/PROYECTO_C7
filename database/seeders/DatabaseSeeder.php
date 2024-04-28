@@ -17,10 +17,13 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         File::deleteDirectory('public/storage/galery');
+        File::deleteDirectory('public/storage/documentos');
         File::deleteDirectory('public/storage/livewire-tmp');
         File::deleteDirectory('public/storage/profile-photos');
         File::makeDirectory('public/storage/galery');
+        File::makeDirectory('public/storage/documentos');
         Storage::deleteDirectory('galery');
+        Storage::deleteDirectory('documentos');
 
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);

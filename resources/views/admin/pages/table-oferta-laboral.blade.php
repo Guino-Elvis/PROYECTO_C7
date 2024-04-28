@@ -59,6 +59,7 @@
                         <td scope="col" class="px-6 py-3">fecha_inicio</td>
                         <td scope="col" class="px-6 py-3">fecha_fin</td>
                         <td scope="col" class="px-6 py-3">limite de postulantes</td>
+                        <td scope="col" class="px-6 py-3">Postulaciones</td>
                         <td scope="col" class="px-6 py-3">Empresa</td>
                         <td scope="col" class="px-6 py-3">Usuario</td>
                         <td scope="col" class="px-6 py-3">Creacion</td>
@@ -96,13 +97,16 @@
                             <td class="p-4 text-center">{{ $ofertaLaboral->fecha_inicio }}</td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->fecha_fin }}</td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->limite_postulante }}</td>
-                            <td class="p-4 text-center">
-                                @foreach ($ofertaLaboral->aplication as $item)
-                                <td class="p-4 text-center">
-                                    {{$item->numero}}
-                                </td>
-                                @endforeach
-
+                            <td class="p-4 text-center hover:text-blue-700">
+                                    @if ($ofertaLaboral->aplication->count() === 0)
+                                    <a href="{{ route('oferta-laboral.show', ['id' => $ofertaLaboral->id]) }}">
+                                        <p>Aun no hay postulantes</p>
+                                    </a>
+                                    @else
+                                    <a href="{{ route('oferta-laboral.show', ['id' => $ofertaLaboral->id]) }}">
+                                        <p>Total de postulantes {{ $ofertaLaboral->aplication->count() }}</p>
+                                    </a>
+                                    @endif
                             </td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->empresa->ra_social }}</td>
                             <td class="p-4 text-center">{{ $ofertaLaboral->user->name }}</td>
@@ -114,16 +118,16 @@
                                 <x-button-success wire:click="edit({{ $ofertaLaboral }})">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </x-button-success>
-                               <form method="post"
-                                action="{{ url('/oferta_laboral/' . $ofertaLaboral->id) }}">
-                                @csrf
-                                {{ method_field('DELETE') }}
-                                    <button class="inline-flex ofertaLaborals-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" type="button"
-                                      data-oferta-laboral-id="{{ $ofertaLaboral->id }}"
+                                <form method="post" action="{{ url('/oferta_laboral/' . $ofertaLaboral->id) }}">
+                                    @csrf
+                                    {{ method_field('DELETE') }}
+                                    <button
+                                        class="inline-flex ofertaLaborals-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                        type="button" data-oferta-laboral-id="{{ $ofertaLaboral->id }}"
                                         onclick="confirmDelete(this)">
                                         <i class="fas fa-trash"></i>
                                     </button>
-                               </form>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -188,7 +192,6 @@
             });
         }
     </script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </div>
-
