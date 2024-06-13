@@ -236,6 +236,17 @@
                                         class="flex items-center justify-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-medium text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
                                         <i class="fa-regular fa-eye"></i>
                                     </a>
+
+                                    <form method="post" action="{{ url('/aplication/' . $item->id) }}">
+                                        @csrf
+                                        {{ method_field('DELETE') }}
+                                        <button
+                                            class="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-red-700 to-red-600 active:from-red-600 active:to-red-600 border border-transparent rounded-lg font-medium text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                            type="button" data-aplications-id="{{ $item->id }}"
+                                            onclick="confirmDelete(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -265,6 +276,44 @@
                 </div>
             @endif
         </div>
+
+        <script>
+            function confirmDelete(button) {
+                const id = button.getAttribute('data-aplications-id');
+
+                Swal.fire({
+                    title: 'Confirmar eliminación',
+                    text: '¿Está seguro de eliminar este item?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Eliminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteRecord(id);
+                    }
+                });
+            }
+
+            function deleteRecord(id) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('/aplication') }}/' + id,
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "_method": "DELETE"
+                    },
+                    success: function(data) {
+                        if (data.success) {
+
+                        }
+                        location.reload(); // Recargar la página, por ejemplo
+                    }
+                });
+            }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     </x-slot>
 </x-sidebar>

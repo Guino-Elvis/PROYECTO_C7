@@ -228,6 +228,7 @@ Route::group(
             Route::get('/sistema/pagina/registro-de-postulaciones/show/{id}', [SisValidacionAplication::class, 'render'])->name('registro-de-postulaciones.show');
             Route::get('aplication/editar/{aplicationId}','App\Http\Livewire\SisValidacionAplication@editar_aplication')->name('aplication.editar');
             Route::put('aplication/editar/{aplicationId}', 'App\Http\Livewire\SisValidacionAplication@guardar_edicion_aplication')->name('aplication.guardar_edicion');
+            Route::Resource('aplication', SisCrudAplication::class);
             Route::get('/sistema/pagina/registro-de-ventas-pagos-yape', AccountSettingProfile::class)->name('registro-de-ventas-pagos-yape');
             Route::get('/sistema/pagina/registro-de-ventas-productos-vendidos', AccountSettingProfile::class)->name('registro-de-ventas-productos-vendidos');
 

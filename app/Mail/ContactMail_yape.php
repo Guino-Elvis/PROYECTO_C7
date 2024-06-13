@@ -27,28 +27,28 @@ class ContactMail_yape extends Mailable
      */
     public function envelope(): Envelope
     {
-        $cliente = session('client_yape');
+        $cliente = session('client');
 
         return (new Envelope)
-            ->from('elioth.condori759@gmail.com', 'INFOTELPerú')
+            ->from('ginoyujra38@gmail.com', 'BolsaLaboral')
             ->to($cliente->email, $cliente->name)
-            ->subject('INFOTELPerú - Confirmación de compra');
+            ->subject('BolsaLaboral - Confirmación de postulacion');
     }
 
     public function build()
     {
-        $cliente = session('client_yape');
-        $voucher = session('voucher_yape');
+        $cliente = session('client');
+        $postulacion = session('postulacion');
 
         // Formatear la fecha en el formato deseado en español
-        $fechaFormateada = Carbon::parse($voucher['updated_at'])->format('M d Y g:iA');
+        $fechaFormateada = Carbon::parse($postulacion['updated_at'])->format('M d Y g:iA');
 
         return $this->view('emails.contactMail_yape', [
             'cliente' => $cliente,
-            'voucher' => $voucher,
+            'postulacion' => $postulacion,
             'fechaFormateada' => $fechaFormateada,
-            'imagePathLogo' => public_path('img/infotel.png'),
-            'qrcodePath' => public_path('images/qrcode_' . $voucher['id'] . '.png'),
+            // 'imagePathLogo' => public_path('img/infotel.png'),
+            // 'qrcodePath' => public_path('images/qrcode_' . $postulacion['id'] . '.png'),
         ]);
     }
 

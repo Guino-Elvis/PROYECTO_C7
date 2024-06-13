@@ -129,52 +129,43 @@
       ">
         <div class="container_01">
             <div class="header">
-                <h1 class="header_h1">¡Tu Pago ha sido Exitoso yape!</h1>
-                <img class="header_img" src="{{ $message->embed($imagePathLogo) }}" alt="Icono INFOTELPerú">
+                <h1 class="header_h1">¡Felicidades fuiste aprobado!</h1>
+                {{-- <img class="header_img" src="{{ $message->embed($imagePathLogo) }}" alt="Icono INFOTELPerú"> --}}
             </div>
             <div class="comentario_pago">
-                <strong>{{ $cliente->name }} {{ $cliente->paterno }} {{ $cliente->materno }}</strong>, tu compra se
-                realizó exitosamente, espero disfrutes del producto, te esperamos, hasta la próxima yape.
+                <strong>{{ $cliente->name }} {{ $cliente->paterno }} {{ $cliente->materno }}</strong>, tu postulacion se
+                realizó exitosamente
             </div>
             <div class="ticket_pago">
-                <h1 class="ticket_pago_h1">Ticket de Pago</h1>
+                <h1 class="ticket_pago_h1">Datos de la postulacion</h1>
                 <div class="ticket_pago_div">
-                    <h1 class="ticket_pago_div_h1">Código de Pago</h1>
-                    <h2 class="ticket_pago_div_h2">{{ $voucher['numero'] }}</h2>
+                    <h1 class="ticket_pago_div_h1">Código</h1>
+                    <h2 class="ticket_pago_div_h2">{{ $postulacion['numero'] }}</h2>
                 </div>
             </div>
             <div class="ticket_pago">
-                <h1 class="ticket_pago_h1">Ticket de Pago</h1>
+                <h1 class="ticket_pago_h1">Datos de oferta laboral</h1>
+                <h1 class="ticket_pago_div_h1">Nombre</h1>
+                <h2 class="ticket_pago_div_h2">
+                    {{ $postulacion->oferta_laboral->titulo }}
+                    {{-- {{ $postulacion['numero'] }} --}}
+
+                </h2>
                 <div class="ticket_pago_div">
-                    <h1 class="ticket_pago_div_h1">Código de Pago</h1>
+                    <h1 class="ticket_pago_div_h1">ESTADO</h1>
                     <h2 class="ticket_pago_div_h2">
-                        @if ($voucher['status'] == 'PA')
-                            PAGADO
-                        @elseif ($voucher['status'] == 'PE')
+                        @if ($postulacion['status'] == 'AP')
+                            APROBADO
+                        @elseif ($postulacion['status'] == 'PE')
                             PENDIENTE
-                        @elseif ($voucher['status'] == 'RE')
+                        @elseif ($postulacion['status'] == 'RE')
                             EN REVISION
                         @endif
                     </h2>
                 </div>
             </div>
-            <div class="monto_pago">
-                <div class="monto_pago_01">
-                    <h1 class="mp_titles_01_h1">Monto Pagado</h1>
-                    <h2 class="mp_titles_01_h2">S/. {{ $voucher['total'] }}</h2>
-                </div>
-                <div class="monto_pago_02">
-                    <h1 class="mp_titles_02_h1">Tu Pago ha sido procesado el</h1>
-                    <h2 class="mp_titles_02_h2">{{ $fechaFormateada }}</h2>
-                </div>
-            </div>
-            <div class="header">
-                <img class="header_img" src="{{ $message->embed($qrcodePath) }}" alt="QR Code">
-            </div>
-            <a href="{{ route('voucher.visualizar') }}?id={{ $voucher['id'] }}" target="_blank"
-                class="btndesvista btn btn-primary">Visualizar voucher</a>
-            {{-- <a href="{{ route('voucher.visualizar', ['id' => $voucher['id']]) }}" target="_blank"
-                class="btn btn-primary">Generar PDF</a> --}}
+
+
         </div>
     </div>
 </body>

@@ -80,4 +80,21 @@ class SisCrudAplication extends Component
     }
 
 
+    public function destroy(string $id)
+    {
+        try {
+            $aplicacion = Application::findOrFail($id);
+
+            // Eliminar la empresa
+            $aplicacion->delete();
+
+            return redirect()
+                ->back()
+                ->with('success', '¡aplicacion eliminada exitosamente!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudo eliminar la aplicacion.');
+        }
+    }
+
+
 }
