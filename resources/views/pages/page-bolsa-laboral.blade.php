@@ -126,6 +126,11 @@
                         </div>
                     </button>
                 @endforeach
+                @if ($ofertas->hasPages())
+            <div class="px-6 py-3">
+                {{ $ofertas->links() }}
+            </div>
+        @endif
             </div>
             <div class="relative">
                 <div class="sticky top-24 z-50">
