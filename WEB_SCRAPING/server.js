@@ -1,36 +1,17 @@
 const puppeteer = require('puppeteer');
-const ExcelJS = require('exceljs');
 const randomUseragent = require('random-useragent');
 const db = require('./db'); // Importa la conexión a la base de datos
 const moment = require('moment');
 
-let count = 0;
-let data = [];
-
-const saveExcel = async (data) => {
-    const workbook = new ExcelJS.Workbook();
-    const fileName = `empleos.xlsx`;
-    const sheet = workbook.addWorksheet('Resultados');
-    const reColumns = [
-        { header: 'Título', key: 'titulo' },
-        { header: 'Ubicación', key: 'ubicacion' },
-        { header: 'Remuneración', key: 'remuneracion' },
-        { header: 'Descripción', key: 'descripcion' },
-        { header: 'Body', key: 'body' },
-        { header: 'Fecha de Inicio', key: 'fecha_inicio' },
-        { header: 'Fecha de Fin', key: 'fecha_fin' },
-        { header: 'Límite para Postulantes', key: 'limite_postulante' },
-        { header: 'Estado', key: 'state' },
-        { header: 'ID de Empresa', key: 'empresa_id' },
-        { header: 'ID de Usuario', key: 'user_id' },
-    ];
-    sheet.columns = reColumns;
-    sheet.addRows(data);
-
-    await workbook.xlsx.writeFile(fileName);
-    console.log('Creado exitosamente');
+// Convertir la fecha al formato deseado
+const convertirFecha = (fecha) => {
+    return moment(fecha, 'DD-MM-YYYY').format('YYYY-MM-DD');
 };
 
+// Función para agregar un retraso entre procesos
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Insertar datos en la base de datos
 const insertDataIntoDB = async (data) => {
     const query = `
         INSERT INTO oferta_laborals (titulo, ubicacion, remuneracion, descripcion, body, fecha_inicio, fecha_fin, limite_postulante, state, empresa_id, user_id)
@@ -65,39 +46,22 @@ const insertDataIntoDB = async (data) => {
     await Promise.all(insertPromises);
 };
 
-const convertirFecha = (fecha) => {
-    return moment(fecha, 'DD-MM-YYYY').format('YYYY-MM-DD');
-};
-
-const initialization = async (url = 'https://www.bumeran.com.pe/empleos.html?page=3') => {
-    console.log('Vuelta número ==>', count);
+// Procesar una página específica
+const processPage = async (page, url) => {
     console.log('Visitando página ==>', url);
+    await page.goto(url, { waitUntil: 'networkidle2' });
 
-    if (count > 5) {
-        console.log('Chao!! 5 Vueltas realizadas');
-        await browser.close();
-        db.end(); // Cierra la conexión a la base de datos
-        console.log('Proceso finalizado exitosamente.');
-        return;
+    // Espera a que se cargue el contenido principal
+    const jobSelector = '.sc-cyVxgd'; // Cambia esto según el selector adecuado de la página
+    try {
+        await page.waitForSelector(jobSelector, { timeout: 5000 }); // Espera un máximo de 5 segundos
+    } catch (error) {
+        console.log(`No se encontraron resultados en la página ${url}. Deteniendo...`);
+        return false; // Si no se encuentra el selector, detiene el bucle
     }
 
-    browser = await puppeteer.launch({
-        headless: false,
-        ignoreHTTPSErrors: true
-    });
-
-    const page = await browser.newPage();
-    const header = randomUseragent.getRandom((ua) => ua.browserName === 'Firefox');
-    await page.setUserAgent(header);
-    await page.setViewport({ width: 1920, height: 1080 });
-
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await page.waitForSelector('#listado-avisos');
-
-    const objectNextButton = await page.$('.andes-pagination__button--next a');
-    const getUrl = await page.evaluate(el => el ? el.getAttribute('href') : null, objectNextButton);
-
     const listaDeItems = await page.$$('.sc-jYIdPM');
+    let pageData = [];  // Aquí almacenamos los datos individuales de cada página
 
     for (const item of listaDeItems) {
         const titulo = await item.$(".sc-dCVVYJ");
@@ -124,7 +88,8 @@ const initialization = async (url = 'https://www.bumeran.com.pe/empleos.html?pag
         const getEmpresaId = await page.evaluate(el => el ? el.innerText : '2', empresa_id);
         const getUserId = await page.evaluate(el => el ? el.innerText : '2', user_id);
 
-        data.push({
+        // Almacena los datos individuales en el array de datos de la página
+        pageData.push({
             titulo: getTitulo,
             ubicacion: getUbicacion,
             remuneracion: getRemuneracion,
@@ -139,17 +104,45 @@ const initialization = async (url = 'https://www.bumeran.com.pe/empleos.html?pag
         });
     }
 
-    count++;
-    await saveExcel(data);
-    await insertDataIntoDB(data);
-    await browser.close();
+    // Inserta los datos obtenidos de la página en la base de datos
+    await insertDataIntoDB(pageData);
+    console.log(`Datos de la página ${url} insertados en la base de datos.`);
 
-    if (getUrl) {
-        initialization(`https://www.bumeran.com.pe/${getUrl}`);
-    } else {
-        console.log('Proceso finalizado exitosamente.');
-        db.end(); // Cierra la conexión a la base de datos
+    await delay(2000); // Espera 2 segundos antes de procesar el siguiente ítem
+
+    return true; // Si todo salió bien, devolvemos true para continuar
+};
+
+// Función principal para inicializar el proceso
+const initialization = async () => {
+    const browser = await puppeteer.launch({
+        headless: true, // Ejecutar en modo "headless"
+        ignoreHTTPSErrors: true
+    });
+
+    const page = await browser.newPage();
+    const header = randomUseragent.getRandom((ua) => ua.browserName === 'Firefox');
+    await page.setUserAgent(header);
+    await page.setViewport({ width: 1920, height: 1080 });
+
+    let pageNumber = 1;
+    let hasMorePages = true;
+
+    // Bucle para seguir procesando páginas mientras haya resultados
+    while (hasMorePages) {
+        const currentUrl = `https://www.bumeran.com.pe/empleos.html?page=${pageNumber}`;
+        hasMorePages = await processPage(page, currentUrl);
+
+        if (hasMorePages) {
+            pageNumber++; // Incrementa el número de página si hay más
+        } else {
+            console.log('No se encontraron más páginas para procesar.');
+        }
     }
+
+    await page.close();
+    await browser.close();
+    db.end(); // Cierra la conexión a la base de datos
 };
 
 initialization();
