@@ -7,6 +7,16 @@
         <div class="flex flex-col sm:flex-row sm:justify-between text-center gap-2 mb-4">
             <div class="flex-1">
                 <div class="relative flex items-center text-gray-400 focus-within:text-green-500">
+                    <div class="flex flex-col">
+                    <form onsubmit="submitForm(event)" class="flex flex-row gap-2">
+                        <input class="w-full pl-14 pr-4 py-2.5 rounded-lg text-sm text-gray-600 outline-none border border-gray-300 focus:border-green-500 focus:ring-green-500 shadow-lg" type="text" id="link_web" name="link_web" value="https://www.bumeran.com.pe/" required>
+                        <button class="px-4  rounded-lg bg-gradient-to-r from-amber-700 to-yellow-600 focus:from-amber-700 focus:to-yellow-600 active:from-amber-600 active:to-yellow-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg" type="submit">Iniciar Scraping</button>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div class="flex-1">
+                <div class="relative flex items-center text-gray-400 focus-within:text-green-500">
                     <span class="absolute left-4 h-6 flex items-center pr-3 border-r border-gray-300">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
@@ -155,7 +165,23 @@
         @endif
     </div>
 
+    <script>
+        async function submitForm(event) {
+            event.preventDefault();
+            const linkWeb = document.getElementById('link_web').value;
 
+            const response = await fetch('http://localhost:3000/start-scraping', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ link_web: linkWeb })
+            });
+
+            const result = await response.text();
+            console.log(result);
+        }
+    </script>
     <script>
         function confirmDelete(button) {
             const id = button.getAttribute('data-oferta-laboral-id');

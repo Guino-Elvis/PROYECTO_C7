@@ -1,17 +1,25 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors'); // Importa cors
 const puppeteer = require('puppeteer');
 const randomUseragent = require('random-useragent');
 const db = require('./db'); // Importa la conexión a la base de datos
 const moment = require('moment');
 
-// Convertir la fecha al formato deseado
+const app = express();
+
+// Configura CORS para permitir solicitudes desde cualquier origen
+app.use(cors());
+
+app.use(bodyParser.json()); // Asegúrate de usar el middleware para manejar JSON
+app.use(express.static('public')); // Servir archivos estáticos como HTML
+
 const convertirFecha = (fecha) => {
     return moment(fecha, 'DD-MM-YYYY').format('YYYY-MM-DD');
 };
 
-// Función para agregar un retraso entre procesos
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Insertar datos en la base de datos
 const insertDataIntoDB = async (data) => {
     const query = `
         INSERT INTO oferta_laborals (titulo, ubicacion, remuneracion, descripcion, body, fecha_inicio, fecha_fin, limite_postulante, state, empresa_id, user_id)
@@ -46,22 +54,20 @@ const insertDataIntoDB = async (data) => {
     await Promise.all(insertPromises);
 };
 
-// Procesar una página específica
 const processPage = async (page, url) => {
     console.log('Visitando página ==>', url);
     await page.goto(url, { waitUntil: 'networkidle2' });
 
-    // Espera a que se cargue el contenido principal
     const jobSelector = '.sc-cyVxgd'; // Cambia esto según el selector adecuado de la página
     try {
-        await page.waitForSelector(jobSelector, { timeout: 5000 }); // Espera un máximo de 5 segundos
+        await page.waitForSelector(jobSelector, { timeout: 5000 });
     } catch (error) {
         console.log(`No se encontraron resultados en la página ${url}. Deteniendo...`);
-        return false; // Si no se encuentra el selector, detiene el bucle
+        return false;
     }
 
     const listaDeItems = await page.$$('.sc-jYIdPM');
-    let pageData = [];  // Aquí almacenamos los datos individuales de cada página
+    let pageData = [];
 
     for (const item of listaDeItems) {
         const titulo = await item.$(".sc-dCVVYJ");
@@ -88,7 +94,6 @@ const processPage = async (page, url) => {
         const getEmpresaId = await page.evaluate(el => el ? el.innerText : '2', empresa_id);
         const getUserId = await page.evaluate(el => el ? el.innerText : '2', user_id);
 
-        // Almacena los datos individuales en el array de datos de la página
         pageData.push({
             titulo: getTitulo,
             ubicacion: getUbicacion,
@@ -104,19 +109,25 @@ const processPage = async (page, url) => {
         });
     }
 
-    // Inserta los datos obtenidos de la página en la base de datos
     await insertDataIntoDB(pageData);
     console.log(`Datos de la página ${url} insertados en la base de datos.`);
 
-    await delay(2000); // Espera 2 segundos antes de procesar el siguiente ítem
+    await delay(2000);
 
-    return true; // Si todo salió bien, devolvemos true para continuar
+    return true;
 };
 
-// Función principal para inicializar el proceso
-const initialization = async () => {
+app.post('/start-scraping', async (req, res) => {
+    const { link_web } = req.body;
+
+    console.log('Enlace recibido:', link_web);
+
+    if (!link_web || !link_web.startsWith('https://www.bumeran.com.pe/')) {
+        return res.status(400).send('Link incorrecto');
+    }
+
     const browser = await puppeteer.launch({
-        headless: true, // Ejecutar en modo "headless"
+        headless: true,
         ignoreHTTPSErrors: true
     });
 
@@ -128,13 +139,13 @@ const initialization = async () => {
     let pageNumber = 1;
     let hasMorePages = true;
 
-    // Bucle para seguir procesando páginas mientras haya resultados
     while (hasMorePages) {
-        const currentUrl = `https://www.bumeran.com.pe/empleos.html?page=${pageNumber}`;
+        const currentUrl = `${link_web}empleos.html?page=${pageNumber}`;
+        console.log('URL actual:', currentUrl);
         hasMorePages = await processPage(page, currentUrl);
 
         if (hasMorePages) {
-            pageNumber++; // Incrementa el número de página si hay más
+            pageNumber++;
         } else {
             console.log('No se encontraron más páginas para procesar.');
         }
@@ -142,7 +153,11 @@ const initialization = async () => {
 
     await page.close();
     await browser.close();
-    db.end(); // Cierra la conexión a la base de datos
-};
+    db.end();
 
-initialization();
+    res.send('Scraping completado');
+});
+
+app.listen(3000, () => {
+    console.log('Servidor escuchando en el puerto 3000');
+});
