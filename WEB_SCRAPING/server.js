@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Importa cors
+const cors = require('cors');
 const puppeteer = require('puppeteer');
 const randomUseragent = require('random-useragent');
+const mysql = require('mysql2'); // Importa mysql2
 const db = require('./db'); // Importa la conexión a la base de datos
 const moment = require('moment');
 
@@ -14,44 +15,69 @@ app.use(cors());
 app.use(bodyParser.json()); // Asegúrate de usar el middleware para manejar JSON
 app.use(express.static('public')); // Servir archivos estáticos como HTML
 
+let scrapingProcess = null; // Variable para almacenar el proceso de scraping
+let cancelScraping = false; // Variable para controlar la cancelación del scraping
+
 const convertirFecha = (fecha) => {
     return moment(fecha, 'DD-MM-YYYY').format('YYYY-MM-DD');
 };
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const insertDataIntoDB = async (data) => {
-    const query = `
-        INSERT INTO oferta_laborals (titulo, ubicacion, remuneracion, descripcion, body, fecha_inicio, fecha_fin, limite_postulante, state, empresa_id, user_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    const insertPromises = data.map((row) => {
-        const values = [
-            row.titulo,
-            row.ubicacion,
-            row.remuneracion,
-            row.descripcion,
-            row.body,
-            row.fecha_inicio,
-            row.fecha_fin,
-            row.limite_postulante,
-            row.state,
-            row.empresa_id,
-            row.user_id
-        ];
-        return new Promise((resolve, reject) => {
-            db.query(query, values, (err) => {
-                if (err) {
-                    console.error('Error insertando datos:', err);
-                    reject(err);
-                } else {
-                    console.log('Datos insertados con éxito');
-                    resolve();
-                }
-            });
+// Asegura que la conexión a la base de datos esté activa
+const ensureDbConnection = () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT 1', (err) => {
+            if (err) {
+                console.log('Conexión perdida. Creando una nueva conexión...');
+                db.end(() => {
+                    // Nota: La conexión se reiniciará automáticamente cuando se vuelva a necesitar
+                    resolve(); // En caso de error, se maneja en el lugar donde se usa
+                });
+            } else {
+                resolve(); // La conexión está activa
+            }
         });
     });
-    await Promise.all(insertPromises);
+};
+
+const insertDataIntoDB = async (data) => {
+    try {
+        await ensureDbConnection(); // Asegura la conexión antes de insertar
+        const query = `
+            INSERT INTO oferta_laborals (titulo, ubicacion, remuneracion, descripcion, body, fecha_inicio, fecha_fin, limite_postulante, state, empresa_id, user_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        const insertPromises = data.map((row) => {
+            const values = [
+                row.titulo,
+                row.ubicacion,
+                row.remuneracion,
+                row.descripcion,
+                row.body,
+                row.fecha_inicio,
+                row.fecha_fin,
+                row.limite_postulante,
+                row.state,
+                row.empresa_id,
+                row.user_id
+            ];
+            return new Promise((resolve, reject) => {
+                db.query(query, values, (err) => {
+                    if (err) {
+                        console.error('Error insertando datos:', err);
+                        reject(err);
+                    } else {
+                        console.log('Datos insertados con éxito');
+                        resolve();
+                    }
+                });
+            });
+        });
+        await Promise.all(insertPromises);
+    } catch (err) {
+        console.error('Error al insertar datos en la base de datos:', err);
+    }
 };
 
 const processPage = async (page, url) => {
@@ -114,7 +140,7 @@ const processPage = async (page, url) => {
 
     await delay(2000);
 
-    return true;
+    return !cancelScraping; // Si se canceló, no hay más páginas
 };
 
 app.post('/start-scraping', async (req, res) => {
@@ -126,36 +152,63 @@ app.post('/start-scraping', async (req, res) => {
         return res.status(400).send('Link incorrecto');
     }
 
-    const browser = await puppeteer.launch({
-        headless: true,
-        ignoreHTTPSErrors: true
-    });
-
-    const page = await browser.newPage();
-    const header = randomUseragent.getRandom((ua) => ua.browserName === 'Firefox');
-    await page.setUserAgent(header);
-    await page.setViewport({ width: 1920, height: 1080 });
-
-    let pageNumber = 1;
-    let hasMorePages = true;
-
-    while (hasMorePages) {
-        const currentUrl = `${link_web}empleos.html?page=${pageNumber}`;
-        console.log('URL actual:', currentUrl);
-        hasMorePages = await processPage(page, currentUrl);
-
-        if (hasMorePages) {
-            pageNumber++;
-        } else {
-            console.log('No se encontraron más páginas para procesar.');
-        }
+    if (scrapingProcess) {
+        return res.status(400).send('El scraping ya está en curso.');
     }
 
-    await page.close();
-    await browser.close();
-    db.end();
+    cancelScraping = false;
+    scrapingProcess = (async () => {
+        await ensureDbConnection(); // Asegura la conexión antes de iniciar el scraping
 
-    res.send('Scraping completado');
+        const browser = await puppeteer.launch({
+            headless: true,
+            ignoreHTTPSErrors: true
+        });
+
+        const page = await browser.newPage();
+        const header = randomUseragent.getRandom((ua) => ua.browserName === 'Firefox');
+        await page.setUserAgent(header);
+        await page.setViewport({ width: 1920, height: 1080 });
+
+        let pageNumber = 1;
+        let hasMorePages = true;
+
+        while (hasMorePages && !cancelScraping) {
+            const currentUrl = `${link_web}empleos.html?page=${pageNumber}`;
+            console.log('URL actual:', currentUrl);
+            hasMorePages = await processPage(page, currentUrl);
+
+            if (hasMorePages) {
+                pageNumber++;
+            } else {
+                console.log('No se encontraron más páginas para procesar.');
+            }
+        }
+
+        await page.close();
+        await browser.close();
+     //   db.end();
+
+        scrapingProcess = null; // Restablece el estado del proceso
+        return 'Scraping completado';
+    })();
+
+    const result = await scrapingProcess;
+    res.send(result);
+});
+
+app.post('/stop-scraping', (req, res) => {
+    if (scrapingProcess) {
+        cancelScraping = true;
+        res.send('Scraping detenido');
+    } else {
+        res.status(400).send('No hay proceso de scraping en curso');
+    }
+});
+
+app.post('/shutdown-server', (req, res) => {
+    res.send('Servidor apagándose...');
+    process.exit(0); // Apaga el servidor
 });
 
 app.listen(3000, () => {
