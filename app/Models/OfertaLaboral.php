@@ -18,10 +18,13 @@ class OfertaLaboral extends Model
         'fecha_inicio',
         'fecha_fin',
         'limite_postulante',
+        'image',
         'state',
         'empresa_id',
         'category_id',
-        'user_id'
+        'user_id',
+        'tipo',
+        'compania'
     ];
 
     public function empresa()
@@ -40,4 +43,9 @@ class OfertaLaboral extends Model
     {
         return $this->hasMany(Application::class);
     }
+
+    public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 }

@@ -32,7 +32,7 @@
                             <div
                                 class="pt-4 pb-2 border-b-2 border-transparent hover:border-blue-700  active:border-blue-700 items-center gap-2 text-black text-xs md:text-sm px-6  sm:flex-none ">
 
-                                <a href="{{ route('dashboard-general') }}" target="_blank"
+                                <a href="{{ route('dashboard-general') }}"
                                     :active="request() - > routeIs('dashboard-general')" class="flex items-center py-2">
                                     {{ __('Sistema') }}
                                 </a>
@@ -139,7 +139,7 @@
                                             {{ __('Administrar Cuenta') }}
                                         </div>
 
-                                        <x-dropdown-link href="{{ route('configurar-cuenta-perfil') }}" target="_blank">
+                                        <x-dropdown-link href="{{ route('configurar-cuenta-perfil') }}" >
                                             {{ __('Perfil') }}
                                         </x-dropdown-link>
 

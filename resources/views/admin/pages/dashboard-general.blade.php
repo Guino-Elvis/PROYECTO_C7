@@ -52,85 +52,127 @@
     </div>
 
     <div class="grid sm:grid-cols-2 sm:gap-x-4 md:grid-cols-3 lg:md:grid-cols-4 xl:grid-cols-5">
-        <x-card col="3">
-            <div class="text-sm text-center">
-                <div class="pb-3 border-b border-gray-300">
-                    Somos innovadores por excelencia
-                </div>
-                <div class="py-2">
-                    <h5 class="text-indigo-600 text-base font-medium mb-2 ">¡Bienvenido al sistema!</h5>
-                    <p class="text-gray-700">
-                        {{ Auth::user()->name }} -
-                        {{ Auth::user()->email }}
-                    </p>
-                </div>
-                <div class="pt-3 border-t border-gray-300 text-gray-600 items-center">
-                    <div id="fecha"></div>
-                    <div id="tiempo"></div>
-                </div>
-            </div>
-        </x-card>
-        <x-card col="2">
-
-            <h3 class="text-xl font-bold leading-none text-gray-900 me-1">Gráfico</h3>
-            <!-- Line Chart -->
-            <div class="pt-2" id="pie-chart"></div>
-        </x-card>
-
-        <div class="scale-75 translate-x-4 skew-y-3 md:transform-none">
-            <x-card></x-card>
-            <div x-data="accordion(1)"
-                class="relative transition-all duration-700 border rounded-xl hover:shadow-2xl">
-                <div @click="handleClick()" class="w-full p-4 text-left cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <span class="tracking-wide">What is x-data ?</span>
-                        <span :class="handleRotate()" class="transition-transform duration-500 transform fill-current ">
-                            <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                            </svg>
-                        </span>
+        <div class="col-span-5">
+            <div class="grid grid-cols-5 gap-4">
+                <x-card col="4">
+                    <div class="flex flex-col">
+                        <div class="text-sm text-center">
+                            <div class="pb-3 border-b border-gray-300">
+                                Somos innovadores por excelencia
+                            </div>
+                            <div class="py-2">
+                                <h5 class="text-indigo-600 text-base font-medium mb-2 ">¡Bienvenido al sistema!</h5>
+                                <p class="text-gray-700">
+                                    {{ Auth::user()->name }} -
+                                    {{ Auth::user()->email }}
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-gray-300 text-gray-600 items-center">
+                                <div id="fecha"></div>
+                                <div id="tiempo"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex-1 bg-[#7AE2E2] rounded-lg p-1">
+                                <form id="scraping-form" class="flex flex-col w-full gap-2">
+                                    <input
+                                        class="w-full pr-4 py-2.5 rounded-lg text-sm text-gray-600 outline-none border border-gray-300 focus:border-green-500 focus:ring-green-500 shadow-lg"
+                                        type="text" id="link" name="link" value="https://www.bumeran.com.pe/"
+                                        required>
+                                    <button
+                                        class="px-4 py-1 rounded-lg bg-gradient-to-r from-green-700 to-green-600 focus:from-green-700 focus:to-green-600 active:from-green-600 active:to-green-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg"
+                                        type="submit">Iniciar Scraping</button>
+                                    <button
+                                        class="px-4 py-1 rounded-lg bg-gradient-to-r from-amber-700 to-yellow-600 focus:from-amber-700 focus:to-yellow-600 active:from-amber-600 active:to-yellow-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg"
+                                        id="stop-button">Detener Scraping</button>
+                                    <button
+                                        class="px-4 py-1 rounded-lg bg-gradient-to-r from-red-700 to-red-600 focus:from-red-700 focus:to-red-600 active:from-red-600 active:to-red-600 text-sm text-white font-semibold tracking-wide cursor-pointer shadow-lg"
+                                        id="shutdown-button">Apagar Servidor</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </x-card>
+                <x-card col="1">
 
-                <div x-ref="tab" :style="handleToggle()"
-                    class="relative overflow-hidden transition-all duration-500 max-h-0">
-                    <div class="px-6 pb-4 text-gray-600">
-                        Declare a new Alpine component and its data for a block of HTML </div>
-                </div>
+                    <h3 class="text-xl font-bold leading-none text-gray-900 me-1">Gráfico Torta por Tipo</h3>
+                    <!-- Line Chart -->
+                    <div class="max-w-[20rem]">
+                        <livewire:grafico.torta />
+                    </div>
+
+                </x-card>
             </div>
-            <script>
-                // Faq
-                document.addEventListener("alpine:init", () => {
-                    Alpine.store("accordion", {
-                        tab: 0
-                    });
-
-                    Alpine.data("accordion", (idx) => ({
-                        init() {
-                            this.idx = idx;
-                        },
-                        idx: -1,
-                        handleClick() {
-                            this.$store.accordion.tab =
-                                this.$store.accordion.tab === this.idx ? 0 : this.idx;
-                        },
-                        handleRotate() {
-                            return this.$store.accordion.tab === this.idx ? "-rotate-180" : "";
-                        },
-                        handleToggle() {
-                            return this.$store.accordion.tab === this.idx ?
-                                `max-height: ${this.$refs.tab.scrollHeight}px` :
-                                "";
-                        }
-                    }));
-                });
-                //  end faq
-            </script>
         </div>
+        <div class="col-span-5">
+            <div class="grid grid-cols-10 gap-5">
+                <x-card col="5">
+
+                    <h3 class="text-xl font-bold leading-none text-gray-900 me-1">Gráfico de Lineas</h3>
+                    <!-- Line Chart -->
+                    <div class="w-auto">
+                        <livewire:grafico.lineas />
+                    </div>
+
+                </x-card>
+                <x-card col="5">
+
+                    <h3 class="text-xl font-bold leading-none text-gray-900 me-1">Gráfico de Barras</h3>
+                    <!-- Line Chart -->
+                    <div class="w-auto">
+                        <livewire:grafico.barras />
+                    </div>
+                </x-card>
+            </div>
+        </div>
+
     </div>
 </div>
+<script>
+    document.getElementById('scraping-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const link = document.getElementById('link').value;
 
+        try {
+            const response = await fetch('http://localhost:3000/start-scraping', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ link_web: link })
+            });
+            const message = await response.text();
+            alert(message);
+        } catch (error) {
+            console.error('Error al iniciar el scraping:', error);
+        }
+    });
+
+    document.getElementById('stop-button').addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://localhost:3000/stop-scraping', {
+                method: 'POST',
+            });
+            const message = await response.text();
+            alert(message);
+        } catch (error) {
+            console.error('Error al detener el scraping:', error);
+        }
+    });
+
+    document.getElementById('shutdown-button').addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://localhost:3000/shutdown-server', {
+                method: 'POST',
+            });
+            const message = await response.text();
+            alert(message);
+            // Opcional: Redirige a otra página o muestra un mensaje de cierre
+        } catch (error) {
+            console.error('Error al apagar el servidor:', error);
+        }
+    });
+</script>
 @section('page-script')
+
     <script>
         const getChartOptions = () => {
             return {

@@ -24,7 +24,7 @@ class EmpresaFactory extends Factory
             'direccion' => $this->faker->text(20),
             'telefono' => $this->faker->numberBetween(9, 100),
             'correo' => $this->faker->unique()->safeEmail(),
-            'category_id' => User::all()->random()->id,
+
             'user_id' => User::all()->random()->id,
         ];
     }

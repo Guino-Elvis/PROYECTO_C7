@@ -45,8 +45,8 @@ const insertDataIntoDB = async (data) => {
     try {
         await ensureDbConnection(); // Asegura la conexión antes de insertar
         const query = `
-            INSERT INTO oferta_laborals (titulo, ubicacion, remuneracion, descripcion, body, fecha_inicio, fecha_fin, limite_postulante, state, empresa_id, user_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO oferta_laborals (titulo, ubicacion, remuneracion, descripcion, body, fecha_inicio, fecha_fin, limite_postulante, image, state, category_id, empresa_id, user_id, tipo, compania, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const insertPromises = data.map((row) => {
             const values = [
@@ -58,9 +58,14 @@ const insertDataIntoDB = async (data) => {
                 row.fecha_inicio,
                 row.fecha_fin,
                 row.limite_postulante,
+                row.image,
                 row.state,
+                row.category_id,
                 row.empresa_id,
-                row.user_id
+                row.user_id,
+                row.tipo,          // Nuevo campo tipo
+                row.compania,      // Nuevo campo compañia
+                row.created_at
             ];
             return new Promise((resolve, reject) => {
                 db.query(query, values, (err) => {
@@ -95,6 +100,13 @@ const processPage = async (page, url) => {
     const listaDeItems = await page.$$('.sc-jYIdPM');
     let pageData = [];
 
+    // Función para obtener la fecha actual en formato timestamp
+      const fecha_hoy = () => {
+        return moment().format('YYYY-MM-DD HH:mm:ss');
+    };
+
+    const fecha_requerida = fecha_hoy(); // Llama a la función para obtener la fecha actual
+
     for (const item of listaDeItems) {
         const titulo = await item.$(".sc-dCVVYJ");
         const ubicacion = await item.$(".sc-LAuEU");
@@ -104,9 +116,23 @@ const processPage = async (page, url) => {
         const fecha_inicio = await item.$(".dIB.mr10");
         const fecha_fin = await item.$(".dIB.mr10");
         const limite_postulante = await item.$(".dIB.mr10");
+        const image = await item.$(".sc-imDdex img");
         const state = await item.$(".dIB.mr10");
+        const category_id = await item.$(".dIB.mr10");
         const empresa_id = await item.$(".dIB.mr10");
         const user_id = await item.$(".dIB.mr10");
+         // Nuevos campos
+         let tipo = 'N/A';
+         try {
+             tipo = await item.$eval('.sc-hdNmWC > .sc-fPEBxH:nth-of-type(2) h3', el => el.innerText.trim());
+         } catch (error) {
+             console.log('No se encontró el segundo <h3>. Usando "N/A".');
+         }
+
+         const compania = await item.$(".sc-kIXKos"); // Cambia el selector según sea necesario
+        const created_at = fecha_requerida; // Asigna directamente la fecha actual
+
+
 
         const getTitulo = await page.evaluate(el => el ? el.innerText : 'N/A', titulo);
         const getUbicacion = await page.evaluate(el => el ? el.innerText : 'N/A', ubicacion);
@@ -116,9 +142,15 @@ const processPage = async (page, url) => {
         const getFechaInicio = convertirFecha(await page.evaluate(el => el ? el.innerText : '02-09-2024', fecha_inicio));
         const getFechaFin = convertirFecha(await page.evaluate(el => el ? el.innerText : '15-09-2024', fecha_fin));
         const getLimitePostulante = await page.evaluate(el => el ? el.innerText : 'N/A', limite_postulante);
+        const getImage = await page.evaluate(el => el ? el.getAttribute('src') : 'N/A', image);
         const getState = await page.evaluate(el => el ? el.innerText : '2', state);
+        const getCategoryId = await page.evaluate(el => el ? el.innerText : '2', category_id);
         const getEmpresaId = await page.evaluate(el => el ? el.innerText : '2', empresa_id);
+          // Nuevos campos
+          const getTipo = await page.evaluate(el => el ? el.innerText : 'N/A', tipo);
+          const getCompania = await page.evaluate(el => el ? el.innerText : 'N/A', compania);
         const getUserId = await page.evaluate(el => el ? el.innerText : '2', user_id);
+
 
         pageData.push({
             titulo: getTitulo,
@@ -129,9 +161,14 @@ const processPage = async (page, url) => {
             fecha_inicio: getFechaInicio,
             fecha_fin: getFechaFin,
             limite_postulante: getLimitePostulante,
+            image: getImage,
             state: getState,
+            category_id: getCategoryId,
             empresa_id: getEmpresaId,
             user_id: getUserId,
+            tipo: tipo,        // Nuevo campo tipo
+            compania: getCompania, // Nuevo campo compañia
+            created_at: created_at,
         });
     }
 

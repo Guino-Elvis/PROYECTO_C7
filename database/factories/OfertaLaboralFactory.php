@@ -24,9 +24,10 @@ class OfertaLaboralFactory extends Factory
             'body' => $this->faker->text(500),
             'fecha_inicio' => now(),
             'fecha_fin' => now(),
+            'image' => 'https/imageee',
             'state' => $this->faker->randomElement([2]),
             'limite_postulante' => $this->faker->numberBetween(0, 40),
-            // 'category_id' => User::all()->random()->id,
+            'category_id' => User::all()->random()->id,
             'empresa_id' => User::all()->random()->id,
             'user_id' => User::all()->random()->id,
         ];

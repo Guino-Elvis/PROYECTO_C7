@@ -35,9 +35,9 @@ class Category extends Model
     //     return $this->hasMany(OfertaLaboral::class);
     // }
 
-    public function empresa()
+    public function oferta_laboral()
     {
-        return $this->hasMany(Empresa::class);
+        return $this->hasMany(OfertaLaboral::class);
     }
 
         //Relación 1 a 1 polimorfica
